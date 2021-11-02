@@ -60,7 +60,7 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 > In this tutorial we evaluate a population of 106 white wheat lines on second year of yield trial (breeding pipeline). At the total 15 flights were collected in 2021 at NDSU Casselton Seed Farm in North Dakota (46.88051067579893, -97.2370382539691). All genotypes had at least two replicates, some check lines had three replicates (e.g., ALPINE, BARLOW, ELGIN-ND, FALLER, GLENN, SYINGMAR, NDSW0932, NDSW14098). The population was evaluated for maturity day (MAT_DAY), plant height (HT), days to heading (DH), lodging (LODG), and yield (YLD). All flights were performed around noon on days without clouds. The flights dates were (1) 05/11, (2) 05/23, (3) 05/26, (4) 06/01, (5) 06/07, (6) 06/10, (7) 06/17, (8) 06/22, (9) 06/25, (10) 06/28, (11) 07/01, (12) 07/13, (13) 07/19, (14) 07/20, and (15) 07/26.  
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_5.jpg" width="70%" height="70%">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_5.jpg">
 </p>
 
 <br />
@@ -68,7 +68,7 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 > As an open source software to do the orthomosaic step we suggest the [OpenDroneMap]( https://www.opendronemap.org/) with the click and point interface [WebODM]( https://www.opendronemap.org/webodm/). A workshop tutorial video is available at [Phenome-Force YouTube Channel]( https://www.youtube.com/watch?v=U-bsA7QjzYE&t=4842s). More information is avaliable [HERE](https://github.com/OpenDroneMap/FIELDimageR/blob/master/README.md#P18).
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/ODM_FIELDimageR_New.jpg" width="50%" height="50%">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/ODM_FIELDimageR_New.jpg" width="70%" height="70%">
 </p>
 
 <div id="R1" />
@@ -226,7 +226,7 @@ write.csv(DataTotal,"DataTotal.csv",row.names = F,col.names = T)
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_8.jpg" width="80%" height="80%">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_8.jpg">
 </p>
 
 <br />
