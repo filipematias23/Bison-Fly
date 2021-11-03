@@ -94,6 +94,7 @@ library(lme4)
 library(emmeans)
 library(reshape2)
 library(car)
+library(plyr)
 
 #####################################
 ### NDSU - Spring Wheat UAV Data  ###
@@ -232,17 +233,17 @@ write.csv(DataTotal,"DataTotal.csv",row.names = F,col.names = T)
 <br />
 
 ```r
-####################
-### Heritability ###
-####################
-
+##########################
 ### Agronomical Traits ###
+##########################
 
+### Field data collected manually ###
 Data <- read.csv("EX_DATA.csv",header = T,fileEncoding="UTF-8-BOM")
 Data$RANGE<-as.factor(Data$RANGE)
 Data$ROW<-as.factor(Data$ROW)
 Data$NAME<-as.factor(Data$NAME)
 
+### Mixed model: getting adjusted means and heritability (H2) ###
 Trait<-c("MAT_DAY","HT","DH","LODG","YLD")
 H2.AG<-NULL
 for(t in 1:length(Trait)){
@@ -267,6 +268,7 @@ for(t in 1:length(Trait)){
 colnames(Pheno.AG)<-c("NAME",Trait)
 head(Pheno.AG)
 
+### Agronomical traits heritability ###
 ggplot(data = H2.AG, 
        aes(x = Trait,
            y = H2*100,
@@ -291,17 +293,25 @@ ggplot(data = H2.AG,
         strip.background = element_rect(fill="white")) 
 ```
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_9.jpg" width="80%" height="80%">
+</p>
 
+<br />
 
 
 ```r
+##################
 ### UAV Traits ###
+##################
 
+### UAV data extracted above (DataTotal) ###
 DataTotal<-read.csv("DataTotal.csv",header = T)
 DataTotal$RANGE<-as.factor(DataTotal$RANGE)
 DataTotal$ROW<-as.factor(DataTotal$ROW)
 DataTotal$NAME<-as.factor(DataTotal$NAME)
 
+### Preparing information for running the statistic models below in a loop ###
 DAP<-unique(DataTotal$DAP)
 Trait.UAV<-c("Blue","Green","Red","RedEdge","NIR", # Single Bands
              "NGRDI","BGI","GLI","NDVI","NDRE","CIG","CIRE", # Vegetation indices
@@ -309,6 +319,7 @@ Trait.UAV<-c("Blue","Green","Red","RedEdge","NIR", # Single Bands
              "Height_0","Height_10","Height_25","Height_50","Height_75","Height_90","Height_100" #Estimated Plant Height
 )
 
+### Mixed model: getting adjusted means and heritability (H2) ###
 H2.UAV<-NULL
 Pheno.UAV<-list()
 for(t1 in 1:length(DAP)){
@@ -334,11 +345,11 @@ for(t1 in 1:length(DAP)){
 }
 names(Pheno.UAV)<-DAP
 
+### UAV traits heritability ###
 H2.UAV<-as.data.frame(H2.UAV)
 H2.UAV$H2<-as.numeric(as.character(H2.UAV$H2))
 H2.UAV$DAP<-as.numeric(as.character(H2.UAV$DAP))
 H2.UAV$Trait<-factor(H2.UAV$Trait,levels = Trait.UAV)
-
 ggplot(data = H2.UAV, 
        aes(x = DAP,
            y = H2*100)) +
@@ -360,7 +371,11 @@ ggplot(data = H2.UAV,
         strip.background = element_rect(fill="white")) 
 ```
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_10.jpg" width="80%" height="80%">
+</p>
 
+<br />
 
 
 ```r 
@@ -368,15 +383,12 @@ ggplot(data = H2.UAV,
 ### Area Under the Curve (AUC) ###
 ##################################
 
-### Choosing some DAP to investigate: ###
-
-unique(DataTotal$DAP)[order(unique(DataTotal$DAP))]
-#DAP<-c(16,19,25,31,34,41,46,49,52,55,67,73,74,80) 
+### Choosing some days after planting (DAP) to investigate ###
+unique(DataTotal$DAP)[order(unique(DataTotal$DAP))] # Options: c(16,19,25,31,34,41,46,49,52,55,67,73,74,80) 
 DAP<-c(19,34,46,55,73,80)
 Data<-DataTotal[DataTotal$DAP%in%DAP,]
 
-### Data visualization - NDVI ###
-
+### Extracted data visualization per DAP - NDVI ###
 ggplot(Data, 
        aes(x = NDVI,
            fill=as.factor(DAP))) +
@@ -398,21 +410,21 @@ ggplot(Data,
         strip.background = element_rect(fill="white")) 
 ```
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_11.jpg" width="80%" height="80%">
+</p>
 
+<br />
 
 ```r
-### Visualization AUC ###
+#########################
+### AUC Visualization ###
+#########################
 
-library(reshape2)
-library(plyr)
-library(DescTools)
-
+### Choosing genotypes to highlight ###
 unique(Data$NAME) # "FALLER","SYINGMAR","NDVITPRO"
-
 Data1<-Data[as.character(Data$NAME)%in%c("FALLER","SYINGMAR","NDVITPRO"),]
-
 Data2<-ddply(Data1,NAME~DAP,summarise,NDVI=mean(NDVI))
-
 ggplot(data=Data2, aes(x=as.numeric(DAP), y= NDVI, col= NAME, group=NAME)) +
   geom_point(size=6)+
   geom_line(size=1.2) +
@@ -431,25 +443,29 @@ ggplot(data=Data2, aes(x=as.numeric(DAP), y= NDVI, col= NAME, group=NAME)) +
         strip.background = element_rect(fill="white")) 
 ```
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_12.jpg" width="80%" height="80%">
+</p>
 
+<br />
 
 ```r
-### AUC - NDVI ###
+#######################
+### Calculating AUC ###
+#######################
 
+### Choosing some UAV traits ###
 Trait<-c("NGRDI","NDRE","CIRE","Canopy","Height_50","Height_90") 
-
 DataAUC<-fieldAUC(data = Data,
                   trait = Trait,
                   keep.columns = colnames(Data)[2:27],
                   frame = "long")
-
 DataAUC$AUC<-as.numeric(DataAUC$AUC)
 DataAUC$TRAIT<-factor(DataAUC$TRAIT,levels = Trait)
 DataAUC$NAME<-as.factor(DataAUC$NAME)
 DataAUC$RANGE<-as.factor(DataAUC$RANGE)
 DataAUC$ROW<-as.factor(DataAUC$ROW)
-# write.csv(DataAUC,"DataAUC.csv",row.names = F,col.names = T)
-
+write.csv(DataAUC,"DataAUC.csv",row.names = F,col.names = T)
 ggplot(DataAUC, aes(x = AUC)) +
   geom_histogram(aes(y=..density..), colour="black", fill="white")+
   geom_density(alpha=.4,position = 'identity', fill="gray") +
@@ -458,15 +474,22 @@ ggplot(DataAUC, aes(x = AUC)) +
   theme(plot.title = element_text(hjust = 0.5)) 
 ```
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_13.jpg" width="80%" height="80%">
+</p>
 
+<br />
 
 ```r
-### Basic mixed model: ###
-
+####################
+### AUC analysis ###
+####################
+DataAUC<-read.csv("DataAUC.csv",header = T)
 DataAUC$RANGE<-as.factor(DataAUC$RANGE)
 DataAUC$ROW<-as.factor(DataAUC$ROW)
 DataAUC$NAME<-as.factor(DataAUC$NAME)
 
+### Mixed model: getting adjusted means and heritability (H2) ###
 H2.AUC<-NULL
 for(t in 1:length(Trait)){
   Data1<-droplevels(DataAUC[as.character(DataAUC$TRAIT)==Trait[t],])
@@ -491,10 +514,10 @@ for(t in 1:length(Trait)){
 }
 head(Pheno.AUC)
 
+### AUC traits heritability ###
 H2.AUC<-as.data.frame(H2.AUC)
 H2.AUC$Trait<-factor(H2.AUC$Trait,Trait)
 H2.AUC$H2<-as.numeric(H2.AUC$H2)
-
 ggplot(data = H2.AUC, 
        aes(x = Trait,
            y = H2*100,
@@ -503,12 +526,27 @@ ggplot(data = H2.AUC,
   scale_fill_grey(start=0.2, end=0.8)+
   ylim(c(0,100))+
   labs(y="H2 (%)",
-       x="Trait", 
+       x="", 
        fill="UAV_AUC") +
   geom_text(aes(label=paste(H2*100,"%")), position=position_dodge(width=0.9), vjust=-0.25)+
-  theme_bw() 
+  theme_bw()+
+  theme(legend.position = "right",
+        legend.direction = "vertical",
+        legend.text = element_text(color="black",size=18),
+        legend.title = element_text(color="black",size=18),
+        axis.text.y = element_text(color="black",size=18),
+        axis.title = element_text(color="black",size=18),
+        axis.text.x = element_blank(),
+        axis.ticks.x=element_blank(),
+        strip.text = element_text(color="black",size=18),
+        strip.background = element_rect(fill="white"))
 ```
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_14.jpg" width="80%" height="80%">
+</p>
+
+<br />
 
 ```r
 ###########
