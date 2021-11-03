@@ -12,8 +12,16 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
   
    * [Introduction](#Intro)
    * [Image analysis in R](#R1)
-   * [1. Selecting the targeted field](#P1)
-   * [3. Rotating the image](#P2)
+   * [1. Agronomical Traits](#P1)
+   * [2. UAV Traits](#P2)
+   * [3. Area Under the Curve (AUC)](#P3)
+   * [4. Principal component analysis (PCA)](#P4)
+   * [5. Correlation (r)](#P5)
+   * [6. Heading Day](#P6)
+   * [7. Maturity](#P7)
+   * [8. Lodging](#P8)
+   * [9. Statistic Applications](#P9)
+   * [Contact](#PC)
 
 <br />
 
@@ -95,6 +103,12 @@ library(emmeans)
 library(reshape2)
 library(car)
 library(plyr)
+library(factoextra)
+library(ggrepel)
+library(agricolae)
+library(corrplot)
+library(RStoolbox)
+library(gridExtra)
 
 #####################################
 ### NDSU - Spring Wheat UAV Data  ###
@@ -232,6 +246,12 @@ write.csv(DataTotal,"DataTotal.csv",row.names = F,col.names = T)
 
 <br />
 
+[Menu](#menu)
+
+<div id="P1" />
+
+## Agronomical Traits
+
 ```r
 ##########################
 ### Agronomical Traits ###
@@ -299,6 +319,11 @@ ggplot(data = H2.AG,
 
 <br />
 
+[Menu](#menu)
+
+<div id="P2" />
+
+## UAV Traits
 
 ```r
 ##################
@@ -377,6 +402,11 @@ ggplot(data = H2.UAV,
 
 <br />
 
+[Menu](#menu)
+
+<div id="P3" />
+
+## Area Under the Curve (AUC)
 
 ```r 
 ##################################
@@ -484,6 +514,7 @@ ggplot(DataAUC, aes(x = AUC)) +
 ####################
 ### AUC analysis ###
 ####################
+
 DataAUC<-read.csv("DataAUC.csv",header = T)
 DataAUC$RANGE<-as.factor(DataAUC$RANGE)
 DataAUC$ROW<-as.factor(DataAUC$ROW)
@@ -548,18 +579,27 @@ ggplot(data = H2.AUC,
 
 <br />
 
-```r
-###########
-### PCA ###
-###########
+[Menu](#menu)
 
-library(factoextra)
+<div id="P4" />
+
+## Principal component analysis (PCA)
+
+```r
+##########################################
+### Principal component analysis (PCA) ###
+##########################################
+
+### Merging Agro and UAV adjusted means ###
 Pheno.PCA<-merge(Pheno.AG,Pheno.AUC,by="NAME")
 Pheno.PCA.1<-Pheno.PCA[,c("MAT_DAY","HT","DH","LODG","YLD",
                           "NDRE","Canopy","Height_90")]
 rownames(Pheno.PCA.1)<-Pheno.PCA$NAME
+
+### PCA ###
 Pheno.PCA.2 <- prcomp(Pheno.PCA.1, center = TRUE, scale = TRUE)
 
+### Highlighting checks ###
 checks<-c("NDSW0932","NDSW14098","NDVITPRO","SYINGMAR","ALPINE","BARLOW","ELGIN-ND","FALLER","GLENN","MAX")
 groups <- as.character(Pheno.PCA$NAME)
 groups[groups%in%checks]<-"Checks"
@@ -567,8 +607,7 @@ groups[groups!="Checks"]<-"Lines"
 groups.text <- as.character(Pheno.PCA$NAME)
 groups.text[!groups.text%in%checks]<-""
 
-require("ggrepel")
-
+### PCA visualization ###
 fviz_pca_biplot(Pheno.PCA.2,
              col.ind = groups, # color by groups
              legend.title = "",
@@ -591,35 +630,43 @@ fviz_pca_biplot(Pheno.PCA.2,
         strip.background = element_rect(fill="white"))
 ```
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_15.jpg" width="80%" height="80%">
+</p>
 
+<br />
 
+[Menu](#menu)
+
+<div id="P5" />
+
+## Correlation Analysis (r)
 
 ```r
 ###################
 ### Correlation ###
 ###################
 
-library(agricolae)
-library(corrplot)
-
 ### Specific flight ###
+# 31 DAP (MAT_DAY)
+# 46 DAP (YLD)
+# 49 DAP (DH)
+# 74 DAP (LODG)
 
-# 31 (MAT_DAY)
-# 46 (YLD)
-# 49 (DH)
-# 74 (LODG)
-
+### 74 DAP ###
 Pheno.UAV.2<-Pheno.UAV$`74`[,c("NAME","NGRDI", "NDRE", "CIRE","Canopy","Height_50","Height_90")]
 Pheno.COR<-merge(Pheno.AG,Pheno.UAV.2,by="NAME")
 Pheno.COR.1<-scale(Pheno.COR[,-1],scale = T)
 rownames(Pheno.COR.1)<-Pheno.COR[,1]
+
+### r (74 DAP) ###
 r<-correlation(Pheno.COR.1)
 r$correlation
 round(r$pvalue,2)
 col <- colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))
 corrplot(r$correlation, 
          p.mat = r$pvalue,
-         sig.level = 0.05, # Level of significance
+         sig.level = 0.05, # Level of significance 5%
          method="color", col=col(200),  
          type="upper", order="hclust",addCoef.col = "black", 
          tl.col="black", tl.srt=45, 
@@ -630,6 +677,8 @@ corrplot(r$correlation,
 Pheno.COR<-merge(Pheno.AG,Pheno.AUC,by="NAME")
 Pheno.COR.1<-scale(Pheno.COR[,-1],scale = T)
 rownames(Pheno.COR.1)<-Pheno.COR[,1]
+
+### r (AUC) ###
 r<-correlation(Pheno.COR.1)
 r$correlation
 round(r$pvalue,2)
@@ -644,39 +693,46 @@ corrplot(r$correlation,
          diag=FALSE)
 ```
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_16.jpg">
+</p>
 
+<br />
 
+[Menu](#menu)
 
+<div id="P6" />
+
+## Heading Day
 
 ```r
-###################
-### Heading Day ###
-###################
+########################
+### Heading Day (DH) ###
+########################
 
-### Simple Regression ###
+### Choosing flights around the DH ###
 DAP<-c(41,49,52)
 Data<-droplevels(DataTotal[as.numeric(DataTotal$DAP)%in%DAP,])
-Data[is.na(as.character(Data$DAP)),]
-Data<-Data[,c("DAP","DH","Height_90")] #Other options: c("CIG","CIRE","Canopy","NGRDI","BGI","GLI","NDVI","NDRE","Height_50","Height_75","Height_90")
 
+### Choosing UAV traits to compare with DH ###
+Data<-Data[,c("DAP","DH","Height_90")] # Other options: c("CIG","CIRE","Canopy","NGRDI","BGI","GLI","NDVI","NDRE","Height_50","Height_75","Height_90")
 Data$DAP<-as.factor(Data$DAP)
 
+### Preparing data to make plots ###
 Data.1<-melt(Data,
              value.name = "Index",
              measure.vars = c("Height_90"))
-
 Data.2<-melt(Data.1,
              value.name = "Days to Heading",
              measure.vars = c("DH"))
-
 colnames(Data.2)<-c("DAP","Index","Index.var","Trait","Trait.var")
-
 Data.2$DAP<-as.factor(Data.2$DAP)
 Data.2$Index<-as.factor(Data.2$Index)
 Data.2$Trait<-as.factor(Data.2$Trait)
 Data.2$Index.var<-as.numeric(as.character(Data.2$Index.var))
 Data.2$Trait.var<-as.numeric(as.character(Data.2$Trait.var))
 
+### Simple regression visualization ###
 ggplot(data = Data.2,
        aes(x = Index.var,
            y = Trait.var,
@@ -684,6 +740,7 @@ ggplot(data = Data.2,
   facet_grid(DAP~Trait, scales = "free_y")+
   geom_smooth(method=lm) +
   geom_point(size = 2) +
+  scale_color_grey(start=0.4, end=0.7)+
 labs(y="Days to Heading (day of the year)",
      x="Index") +
   theme_bw()+
@@ -698,39 +755,46 @@ labs(y="Days to Heading (day of the year)",
         strip.background = element_rect(fill="white"))
 ```
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_17.jpg">
+</p>
 
+<br />
 
+[Menu](#menu)
 
+<div id="P7" />
+
+## Maturity 
 
 ```r
-################
-### Maturity ###
-################
+##########################
+### Maturity (MAT_DAY) ###
+##########################
 
-### Simple Regression ###
+### Choosing flights around the MAT_DAY ###
 DAP<-c(49,52,67,74,80)
 Data<-DataTotal[as.numeric(DataTotal$DAP)%in%DAP,]
-Data[is.na(as.character(Data$DAP)),]
-Data<-Data[,c("DAP","MAT_DAY","CIG","CIRE")] 
 
+### Choosing UAV traits to compare with MAT_DAY ###
+Data<-Data[,c("DAP","MAT_DAY","CIG","CIRE")] # Other options: c("CIG","CIRE","Canopy","NGRDI","BGI","GLI","NDVI","NDRE","Height_50","Height_75","Height_90")
 Data$DAP<-as.factor(Data$DAP)
 
+### Preparing data to make plots ###
 Data.1<-melt(Data,
              value.name = "Index",
              measure.vars = c("CIG","CIRE"))
-
 Data.2<-melt(Data.1,
              value.name = "Trait",
              measure.vars = c("MAT_DAY"))
-
 colnames(Data.2)<-c("DAP","Index","Index.var","Trait","Trait.var")
-
 Data.2$DAP<-as.factor(Data.2$DAP)
 Data.2$Index<-as.factor(Data.2$Index)
 Data.2$Trait<-as.factor(Data.2$Trait)
 Data.2$Index.var<-as.numeric(as.character(Data.2$Index.var))
 Data.2$Trait.var<-as.numeric(as.character(Data.2$Trait.var))
 
+### Simple regression visualization ###
 ggplot(data = Data.2, 
        aes(x = Index.var,
            y = Trait.var,
@@ -738,6 +802,7 @@ ggplot(data = Data.2,
   facet_grid(DAP~Trait, scales = "free")+
   geom_smooth(method=lm) + 
   geom_point(size = 2) +
+  scale_color_grey(start=0.4, end=0.7)+
   labs(y="Maturity (day of the year)",
        x="Index") +
   theme_bw()+
@@ -752,41 +817,50 @@ ggplot(data = Data.2,
         strip.background = element_rect(fill="white")) 
 ```
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_18.jpg">
+</p>
 
+<br />
+
+[Menu](#menu)
+
+<div id="P8" />
+
+## Lodging
 
 ```r
 ###############
 ### Lodging ###
 ###############
 
-### (FB) Flight before: 07/19/2021 (73 DAP) ###
-### (FA1) Flight after_1: 07/20/2021 (74 DAP) ###
-### (FA2) Flight after_2: 07/26/2021 (80 DAP) ###
+### Flight before: 07/19/2021 (73 DAP) ###
+### Flight after_1: 07/20/2021 (74 DAP) ###
+### Flight after_2: 07/26/2021 (80 DAP) ###
 
-### Simple Regression ###
+### Choosing flights around the Lodging event ###
 DAP<-c(73,74,80)
 Data<-DataTotal[as.numeric(DataTotal$DAP)%in%DAP,]
-Data[is.na(as.character(Data$DAP)),]
-Data<-Data[,c("DAP","LODG","Height_90")] #Other options: 
 
+### Choosing UAV traits to compare with LODG ###
+Data<-Data[,c("DAP","LODG","Height_90")] # Other options: c("CIG","CIRE","Canopy","NGRDI","BGI","GLI","NDVI","NDRE","Height_50","Height_75","Height_90") 
 Data$DAP<-as.factor(Data$DAP)
 
+### Preparing data to make plots ###
 Data.1<-melt(Data,
              value.name = "Index",
              measure.vars = c("Height_90"))
-
 Data.2<-melt(Data.1,
              value.name = "Trait",
              measure.vars = c("LODG"))
-
 colnames(Data.2)<-c("DAP","Index","Index.var","Trait","Trait.var")
-
 Data.2$DAP<-as.factor(Data.2$DAP)
 Data.2$Index<-as.factor(Data.2$Index)
 Data.2$Trait<-as.factor(Data.2$Trait)
 Data.2$Index.var<-as.numeric(as.character(Data.2$Index.var))
 Data.2$Trait.var<-as.factor(as.character(Data.2$Trait.var))
 
+### Simple regression visualization ###
 ggplot(data = Data.2, 
        aes(y = Index.var,
            x = Trait.var,
@@ -808,18 +882,16 @@ ggplot(data = Data.2,
         strip.background = element_rect(fill="white")) 
 ```
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_19.jpg">
+</p>
 
-
+<br />
 
 ```r
-### Lodging Visualization ###
-
-library(RStoolbox)
-library(gridExtra)
-
-###########
-### RGB ###
-###########
+###################################
+### RGB - Lodging Visualization ###
+###################################
 
 # 49 DAP #
 lodg.52DAP <- stack("./Lodging/RGB/10_DAP_52_2021_Casselton_YT_06-28_rgb.tif")
@@ -836,13 +908,16 @@ p2<-ggRGB(lodg.74DAP, r=1, g=2, b=3, stretch = 'lin') +
 grid.arrange(p1, p2, ncol=2)
 ```
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_20.jpg">
+</p>
 
-
+<br />
 
 ```r
-###########
-### DSM ###
-###########
+###################################
+### DSM - Lodging Visualization ###
+###################################
 
 dev.off()
 par(mfrow=c(1,2))
@@ -856,22 +931,24 @@ lodg.74DAP.dsm <- stack("./Lodging/DSM/15_DAP_74_2021_Casselton_YT_07-20_dem.tif
 plot(lodg.74DAP.dsm)
 ```
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_21.jpg">
+</p>
 
+<br />
 
 ```r
-#####################
-### Drawing Lines ###
-#####################
+#############################################
+### Drawing Lines - Lodging Visualization ###
+#############################################
 
-# Observing EPH profile for 2 rows:
+# Observing EPH profile for 1 rows:
 Draw <- fieldDraw(mosaic = lodg.74DAP.dsm,
-                     ndraw = 1)
+                     ndraw = 1) # Try changing for 2 to draw 2 lines (Remember to press ESC after finishing the drawing)
 
 # Profile plot:
 dev.off()
 par(mfrow=c(1,2))
-
-# Profile plot:
 plot(x = Draw$drawData$x, 
      y = Draw$drawData[,4], 
      type="l", col="red",lwd=1,
@@ -885,56 +962,77 @@ lines(Draw$drawData$x,Draw$drawData$y, type="l", col="red",lwd=2)
 par(mfrow=c(1,1))
 ```
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_22.jpg">
+</p>
 
+<br />
 
+[Menu](#menu)
+
+<div id="P9" />
+
+## UAV Data on statistic applications for YIELD selection
 
 ```r
-################
-### Modeling ###
-################
+##################################
+### A. Covariates in the model ###
+##################################
 
-library(car)
 dev.off()
 
-### Covariates in the model ###
-
-# No covariate: 
+### 1) No covariate ###  
+# Preparing the data:
 Data <- read.csv("EX_DATA.csv",header = T,fileEncoding="UTF-8-BOM")
 Data$RANGE<-as.factor(Data$RANGE)
 Data$ROW<-as.factor(Data$ROW)
 Data$NAME<-as.factor(Data$NAME)
+# Mixed model:
 mod<-lmer(YLD~RANGE+ROW+(1|NAME),data = Data)
+# AIC (Comparing models):
 (Yield.AIC<-AIC(mod))
+# Residuals visualization:
 qqPlot(residuals(mod))
 
-# Single flight co-variate: 
+# Making a loop:
 Trait<-c("NGRDI","NDRE","CIRE","Canopy","Height_50","Height_90")
 Data.AIC<-NULL
 for(i in 1:length(Trait)){
+
+### 2) Single flight co-variate ###
+# Only one flight (e.g., 55 DAP)
 DataTotal<-read.csv("DataTotal.csv",header = T)
-DAP<-c(55)
+DAP<-c(55) 
+# Preparing the data:
 Data<-DataTotal[DataTotal$DAP%in%DAP,]
 Data$RANGE<-as.factor(Data$RANGE)
 Data$ROW<-as.factor(Data$ROW)
 Data$NAME<-as.factor(Data$NAME)
+# Mixed model:
 mod<-lmer(eval(parse(text = paste("YLD~",Trait[i],"+RANGE+ROW+(1|NAME)",sep=""))),data = Data)
-Data.AIC<-rbind(Data.AIC,cbind(Trait=Trait[i],AIC=AIC(mod), Model="55DAP"))
-qqPlot(residuals(mod))
+# AIC (Comparing models):
+Data.AIC<-rbind(Data.AIC,cbind(Trait=Trait[i],AIC=AIC(mod), Model="55DAP")) 
+# Residuals visualization:
+qqPlot(residuals(mod)) 
 
-# AUC co-variate: 
+### 3) AUC co-variate ### 
+# Preparing the data:
 DataAUC<-read.csv("DataAUC.csv",header = T)
 Data<-DataAUC[as.character(DataAUC$TRAIT)%in%Trait[i],]
 Data$RANGE<-as.factor(Data$RANGE)
 Data$ROW<-as.factor(Data$ROW)
 Data$NAME<-as.factor(Data$NAME)
+# Mixed model:
 mod<-lmer(YLD~AUC+RANGE+ROW+(1|NAME),data = Data)
-Data.AIC<-rbind(Data.AIC,cbind(Trait=Trait[i],AIC=AIC(mod), Model="AUC"))
+# AIC (Comparing models):
+Data.AIC<-rbind(Data.AIC,cbind(Trait=Trait[i],AIC=AIC(mod), Model="AUC")) 
+# Residuals visualization:
 qqPlot(residuals(mod))
 }
-
 Data.AIC<-as.data.frame(Data.AIC)
 Data.AIC$AIC<-as.numeric(Data.AIC$AIC)
 
+### AIC visualization ###
 ggplot(data = Data.AIC, 
        aes(x = Trait,
            y = AIC,
@@ -960,42 +1058,56 @@ ggplot(data = Data.AIC,
 
 ```
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_23.jpg">
+</p>
 
-
+<br />
 
 ```r
-### Main trait selection (indirect selection) ###
+################################################################
+### B. UAV as a main trait in the model (Indirect Selection) ###
+################################################################
 
-# Yield selection based on BLUP (observed data): 
+### 1) Yield selection based on BLUP (observed data): ###
+# Preparing the data:
 Data <- read.csv("EX_DATA.csv",header = T,fileEncoding="UTF-8-BOM")
 Data$RANGE<-as.factor(Data$RANGE)
 Data$ROW<-as.factor(Data$ROW)
 Data$NAME<-as.factor(Data$NAME)
+# Mixed model:
 mod<-lmer(YLD~RANGE+ROW+(1|NAME),data = Data)
+# BLUPs:
 BLUP.Pheno<-as.matrix(ranef(mod)$NAME)
+# Ranking:
 Sel.Pheno<-rownames(BLUP.Pheno)[order(BLUP.Pheno,decreasing = T)]
 
-# Yield selection based on BLUP (UAV data): 
+### 2) Yield selection based on BLUP (UAV AUC data): ###
 DataAUC<-read.csv("DataAUC.csv",header = T)
 Trait<-c("NGRDI","NDRE","CIRE","Canopy","Height_50","Height_90")
+
+# Making a loop:
 Data.SC<-NULL
 for(i in 1:length(Trait)){
+# Preparing the data:
   Data<-droplevels(DataAUC[as.character(DataAUC$TRAIT)%in%Trait[i],])
   Data$RANGE<-as.factor(Data$RANGE)
   Data$ROW<-as.factor(Data$ROW)
   Data$NAME<-as.factor(Data$NAME)
+# Mixed model:
   mod<-lmer(AUC~RANGE+ROW+(1|NAME),data = Data)
+# BLUPs:
   BLUP.AUC<-as.matrix(ranef(mod)$NAME)
+# Ranking:
   Sel.AUC<-rownames(BLUP.AUC)[order(BLUP.AUC,decreasing = T)]
-  
-  # Selection coincidence:
+# Selection coincidence (25%):
   n.sel<-round(length(Sel.Pheno)*0.25,0)
   Data.SC<-rbind(Data.SC,cbind(Trait=Trait[i],SC=sum(Sel.Pheno[1:n.sel]%in%Sel.AUC[1:n.sel])/n.sel))
 }
-
 Data.SC<-as.data.frame(Data.SC)
 Data.SC$SC<-as.numeric(Data.SC$SC)
 
+# Indirect selection coincidence:
 ggplot(data = Data.SC, 
        aes(x = Trait,
            y = SC*100,
@@ -1021,3 +1133,47 @@ ggplot(data = Data.SC,
 
 ```
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_24.jpg">
+</p>
+
+<br />
+
+[Menu](#menu)
+
+<div id="PC" />
+
+### Forum for questions 
+
+> This discussion group provides an online source of information about the **Bison-Fly Pipeline**. Report a bug and ask a question at: 
+* [https://groups.google.com/g/Bison-Fly](https://groups.google.com/g/Bison-Fly) 
+
+<br />
+
+### Licenses
+
+> The R/Bison-Fly package as a whole is distributed under [GPL-2 (GNU General Public License version 2)](https://www.gnu.org/licenses/gpl-2.0.en.html).
+
+<br />
+
+### Citation
+
+> coming soon...
+
+<br />
+
+### Author
+
+> * [Filipe Inacio Matias](https://github.com/filipematias23)
+> * [Andrew Green](https://www.ndsu.edu/agriculture/ag-home/directory/andrew-green)
+
+<br />
+
+### Acknowledgments
+
+> * [Department of Plant Sciences at North Dakota State University](https://www.ndsu.edu/agriculture/academics/academic-units/plant-sciences)
+> * [Drone2Phenome]()
+
+<br />
+
+[Menu](#menu)
