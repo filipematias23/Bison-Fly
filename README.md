@@ -37,7 +37,7 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 
 <br />
 
-> During 2021, our team used the drone [Inspire 2 from DJI]( https://www.dji.com/inspire-2) combined with the multispectral sensor [Sentera 6X]( https://sentera.com/data-capture/6x-multispectral/). For instance, our phenotyping kit is composed by three set of batteries that gives us an autonomy around one hour of flying time. The kit also has one [reflectance panel]( https://support.sentera.com/portal/en/kb/articles/capturing-your-refelectance-panel) for radiometric calibration. This step is important to transform digital numbers to radiance and then reflectance. In addition, this step allows comparing data from different days or locations, which is very common on plant breeding programs. 
+> Our pipeline starts by having at least one authorized drone pilot certificated by the Federal Aviation Administration ([FAA]( https://www.faa.gov/)). For instance, this person needs to take the exam of Remote Pilot of Small Unmanned Aircraft Systems ([Part 107]( https://www.faa.gov/uas/commercial_operators/become_a_drone_pilot/)). The next step is getting the institution approval to collect data using UAVs. In the case of NDSU, any UAV flight related with research needs to get approve from the Research Operations Activities Office by filling up the [Flight Plan Form]( https://www.ndsu.edu/research/for_researchers/unmanned_aircraft_systems/). This step normally takes some time and needs to be well planned ahead of the season to make sure to get approval before the planting starts. During 2021, our team used the drone [Inspire 2 from DJI]( https://www.dji.com/inspire-2) combined with the multispectral sensor [Sentera 6X]( https://sentera.com/data-capture/6x-multispectral/). For instance, our phenotyping kit is composed by three set of batteries that gives us an autonomy around one hour of flying time. The kit also has one [reflectance panel]( https://support.sentera.com/portal/en/kb/articles/capturing-your-refelectance-panel) for radiometric calibration. This step is important to transform digital numbers to radiance and then reflectance. In addition, this step allows comparing data from different days or locations, which is very common on plant breeding programs. 
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_2.jpg" width="70%" height="70%">
@@ -704,6 +704,14 @@ corrplot(r$correlation,
 <div id="P6" />
 
 ## Heading Day
+
+> Heading date (flowering time) in crops is associated with the timing of the floral transition and is one of the most important agronomic traits that determines the distribution and regional adaptability of plants, thereby affecting crop production. In the case of wheat, vernalization is the requirement for a plant to undergo cold temperatures before flowering. 
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_16.jpg">
+</p>
+
+<br />
 
 ```r
 ########################
