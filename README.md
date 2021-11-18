@@ -85,7 +85,20 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 
 ## Image analysis in R
 
-> The first step is to [DOWNLOAD]() the data used in this tutorial by cliking [HERE]().
+> The first step is to **DOWNLOAD** the data used in this tutorial by cliking [**HERE**](https://drive.google.com/file/d/1_Uj3oaiSv31WpbGyyUCfKiKhAqQ_jPUN/view?usp=sharing). The folder has 15 Multispectral orthomosaics, 15 RGB orthomosaics, 15 DSM orthomosaics, 1 CSV file with agronomical field data, and 1 CSV file with the plots' ID map.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_0.jpg" width="50%" height="50%">
+</p>
+
+> The following code is an example how to prepare the images to extract the UAV data with biological meaning for posterior breeding applications.
+
+**Steps:**
+* Necessary packages
+* Uploading orthomosaics
+* Drawing polygons grid ("Shapefile")
+* Removing soil (Evaluate canopy coverage)
+* Extracting data for 14 flights in a loop (UAV traits: calculating vegetation indices and plant height)
 
 ```r
 ##########################################
@@ -252,6 +265,8 @@ write.csv(DataTotal,"DataTotal.csv",row.names = F,col.names = T)
 
 ## Agronomical Traits
 
+> Each specie has a key set of important agronomical traits with economical potential that are evaluated to characterize populations and apply selection. The following code is an example how to calculate adjusted means and heritability in a simple and fast way. As a reminder, this is just an example that must be adapted for each experiment to account field designs. For instance the same model was evaluated twice, the first with genotyped with random effect to calculate heritability (*package [lme4]( https://cran.r-project.org/web/packages/lme4/index.html)*) and the second as fixed effect (*function lm*) to calculate the adjusted means using the *package [emmeans]( https://cran.r-project.org/web/packages/emmeans/)*. The adjusted means will be used on further statistical analysis in this tutorial as principal component analysis and yield prediction. 
+
 ```r
 ##########################
 ### Agronomical Traits ###
@@ -324,6 +339,8 @@ ggplot(data = H2.AG,
 <div id="P2" />
 
 ## UAV Traits
+
+> At the same way presented above for agronomical traits, the code below was adapted to evaluate many UAV traits and calculate their heritability and adjusted means over time in a loop (Days After Planting - DAP). 
 
 ```r
 ##################
@@ -407,6 +424,8 @@ ggplot(data = H2.UAV,
 <div id="P3" />
 
 ## Area Under the Curve (AUC)
+
+> There are many interesting ways to use the UAV data on plant breeding. The first way is evaluating single flights for specific time point aims (e.g., evaluating maturity, plant height, or diseases resistance). These traits normally occur in a specific moment during the season and can be evaluated with 1 or few flights. On the other hand, trats as plant development, biomass, and yield can be evaluated during the entire season using UAVs approaches. In this case, one good strategy is combining all flights in the same analysis. The first option is using a vector with DAP as fixed effect in the model to capture the trait performance over time. The second option is described below which is calculating the area under the curve (AUV) for one trait over the time. This is an interesting combined UAV-multitrait, because some genotypes have slow growing abilities in the beginning of the season but can perform well on the other growing stages. At the same point, genotypes with great performance on early stages can reduce competitivity at the end of the cycle. Using AUC is an interesting way to observe and compare these different biological paths and use only one general trait (e.g., growing performance) for applying selection.
 
 ```r 
 ##################################
@@ -585,6 +604,8 @@ ggplot(data = H2.AUC,
 
 ## Principal component analysis (PCA)
 
+> Principal component analysis (PCA) is a very interesting exploratory data analysis commonly used for dimensionality reduction by projecting data point variability into the first few principal components. In the plant breeding perspective, PCA analysis helps to find multivariate patterns in the population by using lower-dimensional data visualization while preserving as much as possible data's variation. In the example bellow agronomical traits and AUC-UAV-traits were used to characterize this wheat breeding population and observe the existence of potential genotypes compared with the check varieties. It’s possible to observe a great potential for selection in this population that has genotypes with higher multivariate performance compared with the most important cultivars in the market in North Dakota.  
+
 ```r
 ##########################################
 ### Principal component analysis (PCA) ###
@@ -641,6 +662,8 @@ fviz_pca_biplot(Pheno.PCA.2,
 <div id="P5" />
 
 ## Correlation Analysis (r)
+
+>  Pearson correlation coefficient is a measure of linear correlation between two traits. This value gives to the breeders an idea how traits can be direct or indirect related. This measurement must be used with caution, once more complex statistical analyses must be used to understand the real genetic/genomic connection among traits before applying selection. However, for preliminary data evaluation this analysis gives a good idea with what potential agronomical traits the UAV traits can be connected. There are some different ways to make this analysis using single flights to observe specific agronomical traits or AUC-UAV-traits for complex whole growth cycle traits as yield.  
 
 ```r
 ###################
@@ -705,10 +728,10 @@ corrplot(r$correlation,
 
 ## Heading Day
 
-> Heading date (flowering time) in crops is associated with the timing of the floral transition and is one of the most important agronomic traits that determines the distribution and regional adaptability of plants, thereby affecting crop production. In the case of wheat, vernalization is the requirement for a plant to undergo cold temperatures before flowering. 
+> Heading date (flowering time) in crops is associated with the timing of the floral transition and is one of the most important agronomic traits that determines the distribution and regional adaptability of plants, thereby affecting crop production. In the case of wheat, vernalization is the requirement for a plant to undergo cold temperatures before flowering. The heading day is set when 50% of the plants in the plot has a complete spike exposed as observed in the left plot in the image below.  
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_16.jpg">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_HD.jpg">
 </p>
 
 <br />
@@ -774,6 +797,8 @@ labs(y="Days to Heading (day of the year)",
 <div id="P7" />
 
 ## Maturity 
+
+> Maturity is anther important trait in plant breeding and has great potential for being evaluated using UAV traits because is related with greenness. For instance, vegetation indices are great tools to identify when the plants are physiological ready to be harvest. In the example below using a simple linear regression, vegetation indices were used to evaluate maturity. It is possible to identify a great moment for collecting data with UAVs (flying day) around 60 DAPs, when is already possible to observe high correlation between these traits. 
 
 ```r
 ##########################
