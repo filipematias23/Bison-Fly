@@ -728,7 +728,7 @@ corrplot(r$correlation,
 
 ## Heading Day
 
-> Heading date (flowering time) in crops is associated with the timing of the floral transition and is one of the most important agronomic traits that determines the distribution and regional adaptability of plants, thereby affecting crop production. In the case of wheat, vernalization is the requirement for a plant to undergo cold temperatures before flowering. The heading day is set when 50% of the plants in the plot has a complete spike exposed as observed in the left plot in the image below.  
+> Heading date (flowering time) in crops is associated with the timing of the floral transition and is one of the most important agronomic traits that affects crop production. In wheat, vernalization is the requirement for a plant to undergo cold temperatures before flowering.Yearly or late heading date is connected with scape strategies of important diseases as Fusarium Head Blight (FHB). The heading day is set when 50% of the plants in the plot has a complete spike exposed as observed in the left plot in the image below.  
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_HD.jpg">
@@ -798,7 +798,13 @@ labs(y="Days to Heading (day of the year)",
 
 ## Maturity 
 
-> Maturity is anther important trait in plant breeding and has great potential for being evaluated using UAV traits because is related with greenness. For instance, vegetation indices are great tools to identify when the plants are physiological ready to be harvest. In the example below using a simple linear regression, vegetation indices were used to evaluate maturity. It is possible to identify a great moment for collecting data with UAVs (flying day) around 60 DAPs, when is already possible to observe high correlation between these traits. 
+> Maturity is another important trait in plant breeding and has great potential for being measured using UAV traits because is related with greenness. For instance, vegetation indices are great tools to identify when the plants are physiological ready to be harvest. In the example below using a simple linear regression, vegetation indices were used to evaluate maturity. It is possible to identify a great moment for collecting data with UAVs (flying day) around 60 DAPs, when is already possible to observe high correlation between these traits. The genotype is considered phenotypic matured when 50% of the plants’ stems in the plot are yellow as represented on the left site in the image below. 
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_M.jpg">
+</p>
+
+<br />
 
 ```r
 ##########################
@@ -861,6 +867,14 @@ ggplot(data = Data.2,
 <div id="P8" />
 
 ## Lodging
+
+> Lodging is the bending over of the stems near ground level of grain crops, which makes them very difficult to harvest, and can dramatically reduce yield. This trat is easily measured using the canopy height model (CHM) or estimated plant height (EPH) calculated using the digital surface model (DSM). DSM is one output from the orthomosaicking step when the images have georeferenced information or also called as gridded surface elevation. The idea is to collect images before the plants start sprouting (Soil Base) and later in the growth cycle when the plants are already grown (more information in [HERE]( https://github.com/OpenDroneMap/FIELDimageR#P10)). In the example below, images were collected at 73 DAP before a heavy rain event. Another set images were collected in the next day at 74 DAP to investigate the ability of this approach on evaluating lodging. Genotypes with high lodging scores also were among the tallest plants at 73 DAP (Upper set of boxplots in the image below). The same genotypes had a reduction of EPH measured using our UAV platform at 74 DAP after the rain (Center set of boxplots). However, later in the cycle at 80 DAP some of these genotypes had the plasticity to recover and keep upright (Lower set of boxplots). This information can be used by the breeder to infer the ability of recovering of potential tall yield genotypes. 
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_L.jpg">
+</p>
+
+<br />
 
 ```r
 ###############
@@ -1007,6 +1021,8 @@ par(mfrow=c(1,1))
 
 ## UAV Data on statistic applications for YIELD selection
 
+> There are many ways to use UAV data to evaluate yield in plant breeding. Bellow we suggest three simple strategies that can be adapted to different crops. (A) The first suggestion is to use UAV-Traits as covariates in the model. (B) The second is to use AUC-UAV-Traits for indirect selection. (C) And third is to apply indirect selection using UAV-Traits from all flights, however using DAP as cofactor in the model. Please, feel free to contact us and suggest new ways of application. Using NDRE as covariate in the first strategy provided the lower Akaike information criterion (AIC) for both 55 DAP and AUC. NDRE and CANOPY provided the greater coincidence selection with yield ~ 60% using the indirect selection strategy. Selecting six flights and using the DAP as cofactor in the model increased the selection coincidence using NDRE from 60% to 65%.  
+
 ```r
 ##################################
 ### A. Covariates in the model ###
@@ -1092,7 +1108,7 @@ ggplot(data = Data.AIC,
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_23.jpg">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_23.jpg"  width="80%" height="80%">
 </p>
 
 <br />
@@ -1167,7 +1183,83 @@ ggplot(data = Data.SC,
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_24.jpg">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_24.jpg"  width="80%" height="80%">
+</p>
+
+<br />
+
+```r
+###############################################################################
+### C. Indirect Selection using UAV traits and DAP as cofactor in the model ###
+###############################################################################
+
+### 1) Yield selection based on BLUP (observed data): ###
+# Preparing the data:
+Data <- read.csv("EX_DATA.csv",header = T,fileEncoding="UTF-8-BOM")
+Data$RANGE<-as.factor(Data$RANGE)
+Data$ROW<-as.factor(Data$ROW)
+Data$NAME<-as.factor(Data$NAME)
+# Mixed model:
+mod<-lmer(YLD~RANGE+ROW+(1|NAME),data = Data)
+# BLUPs:
+BLUP.Pheno<-as.matrix(ranef(mod)$NAME)
+# Ranking:
+Sel.Pheno<-rownames(BLUP.Pheno)[order(BLUP.Pheno,decreasing = T)]
+
+### 2) Yield selection based on BLUP (UAV data): ###
+DataTotal<-read.csv("DataTotal.csv",header = T)
+DAP<-c(31, 41, 49, 55, 67, 73)
+DataTotal<-droplevels(DataTotal[DataTotal$DAP%in%DAP,])
+# Preparing the data:
+DataTotal$DAP<-as.factor(DataTotal$DAP)
+DataTotal$RANGE<-as.factor(DataTotal$RANGE)
+DataTotal$ROW<-as.factor(DataTotal$ROW)
+DataTotal$NAME<-as.factor(DataTotal$NAME)
+Trait<-c("NGRDI","NDRE","CIRE","Canopy","Height_50","Height_90")
+
+# Making a loop:
+Data.SC<-NULL
+for(i in 1:length(Trait)){
+  # Mixed model:
+  mod<-lmer(eval(parse(text = paste(Trait[i]," ~ DAP+RANGE+ROW+(1|NAME)",sep=""))),data = DataTotal)
+  # BLUPs:
+  BLUP.UAV<-as.matrix(ranef(mod)$NAME)
+  # Ranking:
+  Sel.UAV<-rownames(BLUP.UAV)[order(BLUP.UAV,decreasing = T)]
+  # Selection coincidence (25%):
+  n.sel<-round(length(Sel.Pheno)*0.25,0)
+  Data.SC<-rbind(Data.SC,cbind(Trait=Trait[i],SC=sum(Sel.Pheno[1:n.sel]%in%Sel.UAV[1:n.sel])/n.sel))
+}
+Data.SC<-as.data.frame(Data.SC)
+Data.SC$SC<-as.numeric(Data.SC$SC)
+
+# Indirect selection coincidence:
+ggplot(data = Data.SC, 
+       aes(x = Trait,
+           y = SC*100,
+           fill=as.factor(Trait))) +
+  geom_bar(stat="identity", position = "dodge") +
+  scale_fill_grey(start=0.2, end=0.8)+
+  ylim(c(0,100))+
+  labs(y="Indirect selection coincidence (%)",
+       x="", 
+       fill="UAV Traits") +
+  geom_text(aes(label=paste(round(SC*100,2),"%")),size=5, position=position_dodge(width=0.9), vjust=-0.25)+
+  theme_bw()+
+  theme(legend.position = "right",
+        legend.direction = "vertical",
+        legend.text = element_text(color="black",size=18),
+        legend.title = element_text(color="black",size=18),
+        axis.text.y = element_text(color="black",size=18),
+        axis.title = element_text(color="black",size=18),
+        axis.text.x = element_blank(),
+        axis.ticks.x=element_blank(),
+        strip.text = element_text(color="black",size=18),
+        strip.background = element_rect(fill="white")) 
+```
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_25.jpg"  width="80%" height="80%">
 </p>
 
 <br />
