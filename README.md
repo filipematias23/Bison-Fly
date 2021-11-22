@@ -1,6 +1,6 @@
 # [Bison-Fly](https://github.com/filipematias23/Bison-Fly): UAV pipeline at NDSU Spring Wheat Breeding Program
 
-The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in partnership with *Drone2Phenome* ([D2P](https://www.ag2pi.org/)). In this pipeline we are presenting step by step how we have been applying UAV data in our breeding program. This is an open source R code from where anyone can use and adept for different crops. Hope this pipeline help you with your research and all suggestions to improve it are welcome. Help us to build this platform in partnership with all D2P community. 
+The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in partnership with *Drone2Phenome* ([D2P](https://www.ag2pi.org/)). In this pipeline we are presenting step by step how we have been applying UAV data in our breeding program. This is an open source R code from which anyone may use and adopt it for different crops and situation. We hope this pipeline helps you with your research and all suggestions to improve it are welcome. Help us to build this platform in partnership with all D2P community. 
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BisonFly.jpg" width="40%" height="40%">
