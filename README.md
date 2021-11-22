@@ -263,7 +263,7 @@ write.csv(DataTotal,"DataTotal.csv",row.names = F,col.names = T)
 
 <div id="P1" />
 
-## Agronomical Traits
+## Agronomic Traits
 
 > Each species has a key set of important agronomic traits with economical potential that are evaluated to characterize populations and apply selection. The following code is an example how to calculate adjusted means and heritability in a simple and fast way. As a reminder, this is just an example that must be adapted for each experiment to account for different field designs. For instance the same model was evaluated twice, the first with genotyped with random effect to calculate heritability (*package [lme4]( https://cran.r-project.org/web/packages/lme4/index.html)*) and the second as fixed effect (*function lm*) to calculate the adjusted means using the *package [emmeans]( https://cran.r-project.org/web/packages/emmeans/)*. The adjusted means will be used for further statistical analysis in this tutorial as well as principal component analysis and yield prediction. 
 
