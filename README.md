@@ -1,6 +1,6 @@
 # [Bison-Fly](https://github.com/filipematias23/Bison-Fly): UAV pipeline at NDSU Spring Wheat Breeding Program
 
-The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in partnership with *Drone2Phenome* ([D2P](https://www.ag2pi.org/)). In this pipeline we are presenting step by step how we have been applying UAV data on our breeding program. This is an open source R code from where anyone can use and adept for different crops. Hope this pipeline help you with your research and all suggestions to improve it are welcome. Help us to build this platform in partnership with all D2P community. 
+The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in partnership with *Drone2Phenome* ([D2P](https://www.ag2pi.org/)). In this pipeline we are presenting step by step how we have been applying UAV data in our breeding program. This is an open source R code from where anyone can use and adept for different crops. Hope this pipeline help you with your research and all suggestions to improve it are welcome. Help us to build this platform in partnership with all D2P community. 
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BisonFly.jpg" width="40%" height="40%">
@@ -29,7 +29,7 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 
 ## Introduction 
 
-> Welcome to the **NDSU Spring Wheat Breeding Program** lead by [Dr. Andrew Green](https://www.ndsu.edu/agriculture/ag-home/directory/andrew-green). In this tutorial, we will be presenting how we have been implementing UAV data on our breeding program. This pipeline is a compilation of [R]( https://www.r-project.org/) codes and functions from different packages to implement high-throughput phenotyping methods and understand spring wheat traits.
+> Welcome to the **NDSU Spring Wheat Breeding Program** led by [Dr. Andrew Green](https://www.ndsu.edu/agriculture/ag-home/directory/andrew-green). In this tutorial, we will be presenting how we have been implementing UAV data in our breeding program. This pipeline is a compilation of [R]( https://www.r-project.org/) codes and functions from different packages to implement high-throughput phenotyping methods and understand spring wheat traits.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_1a.jpg">
@@ -37,7 +37,7 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 
 <br />
 
-> Our pipeline starts by having at least one authorized drone pilot certificated by the Federal Aviation Administration ([FAA]( https://www.faa.gov/)). For instance, this person needs to take the exam of Remote Pilot of Small Unmanned Aircraft Systems ([Part 107]( https://www.faa.gov/uas/commercial_operators/become_a_drone_pilot/)). The next step is getting the institution approval to collect data using UAVs. In the case of NDSU, any UAV flight related with research needs to get approve from the Research Operations Activities Office by filling up the [Flight Plan Form]( https://www.ndsu.edu/research/for_researchers/unmanned_aircraft_systems/). This step normally takes some time and needs to be well planned ahead of the season to make sure to get approval before the planting starts. During 2021, our team used the drone [Inspire 2 from DJI]( https://www.dji.com/inspire-2) combined with the multispectral sensor [Sentera 6X]( https://sentera.com/data-capture/6x-multispectral/). For instance, our phenotyping kit is composed by three set of batteries that gives us an autonomy around one hour of flying time. The kit also has one [reflectance panel]( https://support.sentera.com/portal/en/kb/articles/capturing-your-refelectance-panel) for radiometric calibration. This step is important to transform digital numbers to radiance and then reflectance. In addition, this step allows comparing data from different days or locations, which is very common on plant breeding programs. 
+> Our pipeline starts by having at least one authorized drone pilot certified by the Federal Aviation Administration ([FAA]( https://www.faa.gov/)). For instance, this person needs to take the exam for Remote Pilot of Small Unmanned Aircraft Systems ([Part 107]( https://www.faa.gov/uas/commercial_operators/become_a_drone_pilot/)). The next step is getting the institution approval to collect data using UAVs. In the case of NDSU, any UAV flight related with research needs to get approve from the Research Operations Activities Office by filling up the [Flight Plan Form]( https://www.ndsu.edu/research/for_researchers/unmanned_aircraft_systems/). This step normally takes some time and needs to be well planned ahead of the season to make sure to get approval before planting starts. During 2021, our team used the drone [Inspire 2 from DJI]( https://www.dji.com/inspire-2) combined with the multispectral sensor [Sentera 6X]( https://sentera.com/data-capture/6x-multispectral/). Our phenotyping kit is composed of three set of batteries that gives us autonomy for around one hour of flying time. The kit also has one [reflectance panel]( https://support.sentera.com/portal/en/kb/articles/capturing-your-refelectance-panel) for radiometric calibration. This step is important to transform digital numbers to radiance and then reflectance. In addition, this step allows comparing data from different days or locations, which is very common in plant breeding programs. 
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_2.jpg" width="70%" height="70%">
@@ -45,11 +45,11 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 
 <br />
 
-> The flight mission was planed using the software [FieldAgent from Sentera]( https://sentera.com/fieldagent/). The idea is drawing the trial using the desktop version before going to field. Once in the flying area or trial was established, the flights parameters were set for 75% of overlapping, 15 mph, and flying height of 200 feet. There are other great open source options for DJI drones as [Pix4Dcapture]( https://support.pix4d.com/hc/en-us/articles/202557269-Pix4Dcapture-Getting-Started) and [DroneDeploy]( https://www.dronedeploy.com/product/mobile/). 
+> The flight mission was planned using the software [FieldAgent from Sentera]( https://sentera.com/fieldagent/). This is used for drawing the trial using the desktop version before going to field. Once in the flying area or trial was established, the flights parameters were set for 75% of overlapping, 15 mph, and flying height of 200 feet. There are other great open source options for DJI drones as [Pix4Dcapture]( https://support.pix4d.com/hc/en-us/articles/202557269-Pix4Dcapture-Getting-Started) and [DroneDeploy]( https://www.dronedeploy.com/product/mobile/). 
 
 <br />
 
-> For georeferencing, we have been using white plastic bucket lids (3.6 gallons) as geographic control points (GCPs). These lids are fixed in the ground with metal sticks in each corners of the field trial at the beginning of planting season. Observe that we normally paint the central part of the lid to facilitate finding where to click to georeferencing this point during the orthomosaic step. We also make some holes to drain the water from rain or irrigation. The GCPs stay in the field during the entire season and must be imagery alongside with the plants for each flight or data collection. This is important because allows a better overlayer of the experimental plots and facilitate drawing the grid plot polygons only once. Please for more information read this link: [https://github.com/OpenDroneMap/FIELDimageR#P5](https://github.com/OpenDroneMap/FIELDimageR#P5). 
+> For georeferencing, we have been using white plastic bucket lids (5 gallons) as geographic control points (GCPs). These lids are fixed in the ground with metal landscaping stakes in the corners of the field trial at the beginning of planting season. We opted to paint the central part of the lid to facilitate finding where to click to georeferencing this point during the orthomosaic step. We also made holes to drain water from the lid. The GCPs stay in the field during the entire season and must be photographed alongside with the plants for each flight or data collection. This is important because allows a better overlayer of the experimental plots and facilitate drawing the grid plot polygons only once. Please for more information read this link: [https://github.com/OpenDroneMap/FIELDimageR#P5](https://github.com/OpenDroneMap/FIELDimageR#P5). 
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_3.jpg">
@@ -65,7 +65,7 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 
 <br />
 
-> In this tutorial we evaluate a population of 106 white wheat lines on second year of yield trial (breeding pipeline). At the total 15 flights were collected in 2021 at NDSU Casselton Seed Farm in North Dakota (46.88051067579893, -97.2370382539691). All genotypes had at least two replicates, some check lines had three replicates (e.g., ALPINE, BARLOW, ELGIN-ND, FALLER, GLENN, SYINGMAR, NDSW0932, NDSW14098). The population was evaluated for maturity day (MAT_DAY), plant height (HT), days to heading (DH), lodging (LODG), and yield (YLD). All flights were performed around noon on days without clouds. The flights dates were (1) 05/11, (2) 05/23, (3) 05/26, (4) 06/01, (5) 06/07, (6) 06/10, (7) 06/17, (8) 06/22, (9) 06/25, (10) 06/28, (11) 07/01, (12) 07/13, (13) 07/19, (14) 07/20, and (15) 07/26.  
+> In this tutorial we evaluate a population of 106 white wheat lines in a second year yield trial (breeding pipeline). At the total 15 flights were collected in 2021 at NDSU Casselton Seed Farm in North Dakota (46.88051067579893, -97.2370382539691). All genotypes had at least two replicates, some check lines had three replicates (e.g., ALPINE, BARLOW, ELGIN-ND, FALLER, GLENN, SYINGMAR, NDSW0932, NDSW14098). The population was evaluated for maturity day (MAT_DAY), plant height (HT), days to heading (DH), lodging (LODG), and yield (YLD). All flights were performed around noon on days without clouds. The flights dates were (1) 05/11, (2) 05/23, (3) 05/26, (4) 06/01, (5) 06/07, (6) 06/10, (7) 06/17, (8) 06/22, (9) 06/25, (10) 06/28, (11) 07/01, (12) 07/13, (13) 07/19, (14) 07/20, and (15) 07/26.  
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_5.jpg">
@@ -85,7 +85,7 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 
 ## Image analysis in R
 
-> The first step is to **DOWNLOAD** the data used in this tutorial by cliking [**HERE**](https://drive.google.com/file/d/1_Uj3oaiSv31WpbGyyUCfKiKhAqQ_jPUN/view?usp=sharing). The folder has 15 Multispectral orthomosaics, 15 RGB orthomosaics, 15 DSM orthomosaics, 1 CSV file with agronomical field data, and 1 CSV file with the plots' ID map.
+> The first step is to **DOWNLOAD** the data used in this tutorial by clicking [**HERE**](https://drive.google.com/file/d/1_Uj3oaiSv31WpbGyyUCfKiKhAqQ_jPUN/view?usp=sharing). The folder has 15 Multispectral orthomosaics, 15 RGB orthomosaics, 15 DSM orthomosaics, 1 CSV file with agronomical field data, and 1 CSV file with the plots' ID map.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_0.jpg" width="50%" height="50%">
@@ -265,7 +265,7 @@ write.csv(DataTotal,"DataTotal.csv",row.names = F,col.names = T)
 
 ## Agronomical Traits
 
-> Each specie has a key set of important agronomical traits with economical potential that are evaluated to characterize populations and apply selection. The following code is an example how to calculate adjusted means and heritability in a simple and fast way. As a reminder, this is just an example that must be adapted for each experiment to account field designs. For instance the same model was evaluated twice, the first with genotyped with random effect to calculate heritability (*package [lme4]( https://cran.r-project.org/web/packages/lme4/index.html)*) and the second as fixed effect (*function lm*) to calculate the adjusted means using the *package [emmeans]( https://cran.r-project.org/web/packages/emmeans/)*. The adjusted means will be used on further statistical analysis in this tutorial as principal component analysis and yield prediction. 
+> Each species has a key set of important agronomic traits with economical potential that are evaluated to characterize populations and apply selection. The following code is an example how to calculate adjusted means and heritability in a simple and fast way. As a reminder, this is just an example that must be adapted for each experiment to account for different field designs. For instance the same model was evaluated twice, the first with genotyped with random effect to calculate heritability (*package [lme4]( https://cran.r-project.org/web/packages/lme4/index.html)*) and the second as fixed effect (*function lm*) to calculate the adjusted means using the *package [emmeans]( https://cran.r-project.org/web/packages/emmeans/)*. The adjusted means will be used for further statistical analysis in this tutorial as well as principal component analysis and yield prediction. 
 
 ```r
 ##########################
@@ -340,7 +340,7 @@ ggplot(data = H2.AG,
 
 ## UAV Traits
 
-> At the same way presented above for agronomical traits, the code below was adapted to evaluate many UAV traits and calculate their heritability and adjusted means over time in a loop (Days After Planting - DAP). 
+> In the same way presented above for agronomic traits, the code below was adapted to evaluate many UAV traits and calculate their heritability and adjusted means over time in a loop (Days After Planting - DAP). 
 
 ```r
 ##################
@@ -425,7 +425,7 @@ ggplot(data = H2.UAV,
 
 ## Area Under the Curve (AUC)
 
-> There are many interesting ways to use the UAV data on plant breeding. The first way is evaluating single flights for specific time point aims (e.g., evaluating maturity, plant height, or diseases resistance). These traits normally occur in a specific moment during the season and can be evaluated with 1 or few flights. On the other hand, trats as plant development, biomass, and yield can be evaluated during the entire season using UAVs approaches. In this case, one good strategy is combining all flights in the same analysis. The first option is using a vector with DAP as fixed effect in the model to capture the trait performance over time. The second option is described below which is calculating the area under the curve (AUV) for one trait over the time. This is an interesting combined UAV-multitrait, because some genotypes have slow growing abilities in the beginning of the season but can perform well on the other growing stages. At the same point, genotypes with great performance on early stages can reduce competitivity at the end of the cycle. Using AUC is an interesting way to observe and compare these different biological paths and use only one general trait (e.g., growing performance) for applying selection.
+> There are many interesting ways to use the UAV data for plant breeding. The first way is evaluating single flights for specific time point aims (e.g., evaluating maturity, plant height, or disease resistance). These traits normally occur in a specific moment during the season and can be evaluated with 1 or few flights. On the other hand, traits such as plant development, biomass, and yield can be evaluated throughout the entire season using UAV data. In this case, one good strategy is combining all flights in the same analysis. The first option is using a vector with DAP as fixed effect in the model to capture the trait performance over time. The second option is described below which is calculating the area under the curve (AUV) for one trait over the time. This is an interesting combined UAV-multitrait, because some genotypes have slow growing abilities in the beginning of the season but can perform well on the other growing stages. At the same point, genotypes with great performance in early stages can reduce competitivity at the end of the cycle. Using AUC is an interesting way to observe and compare these different biological paths and use only one general trait (e.g., growing performance) for applying selection.
 
 ```r 
 ##################################
@@ -604,7 +604,7 @@ ggplot(data = H2.AUC,
 
 ## Principal component analysis (PCA)
 
-> Principal component analysis (PCA) is a very interesting exploratory data analysis commonly used for dimensionality reduction by projecting data point variability into the first few principal components. In the plant breeding perspective, PCA analysis helps to find multivariate patterns in the population by using lower-dimensional data visualization while preserving as much as possible data's variation. In the example bellow agronomical traits and AUC-UAV-traits were used to characterize this wheat breeding population and observe the existence of potential genotypes compared with the check varieties. It’s possible to observe a great potential for selection in this population that has genotypes with higher multivariate performance compared with the most important cultivars in the market in North Dakota.  
+> Principal component analysis (PCA) is an exploratory data analysis commonly used for dimensionality reduction by projecting data point variability into the first few principal components. In the plant breeding perspective, PCA analysis helps to find multivariate patterns in the population by using lower-dimensional data visualization while preserving as much as possible data's variation. In the example below, agronomic traits and AUC-UAV-traits were used to characterize the wheat breeding population and observe the existence of potential genotypes compared with the check varieties. It’s possible to observe a great potential for selection in this population that has genotypes with higher multivariate performance compared with the named check varieties.  
 
 ```r
 ##########################################
@@ -663,7 +663,7 @@ fviz_pca_biplot(Pheno.PCA.2,
 
 ## Correlation Analysis (r)
 
->  Pearson correlation coefficient is a measure of linear correlation between two traits. This value gives to the breeders an idea how traits can be direct or indirect related. This measurement must be used with caution, once more complex statistical analyses must be used to understand the real genetic/genomic connection among traits before applying selection. However, for preliminary data evaluation this analysis gives a good idea with what potential agronomical traits the UAV traits can be connected. There are some different ways to make this analysis using single flights to observe specific agronomical traits or AUC-UAV-traits for complex whole growth cycle traits as yield.  
+>  Pearson correlation coefficient is a measure of linear correlation between two traits. This value gives to the breeders an idea how traits can be direct or indirect related. This measurement must be used with caution- more complex statistical analyses should be used to understand the real genetic/genomic connection among traits before applying selection. However, for preliminary data evaluation this analysis gives a good idea with what potential agronomical traits the UAV traits can be connected. There are some different ways to make this analysis using single flights to observe specific agronomical traits or AUC-UAV-traits for complex whole growth cycle traits as yield.  
 
 ```r
 ###################
@@ -728,7 +728,7 @@ corrplot(r$correlation,
 
 ## Heading Day
 
-> Heading date (flowering time) in crops is associated with the timing of the floral transition and is one of the most important agronomic traits that affects crop production. In wheat, vernalization is the requirement for a plant to undergo cold temperatures before flowering.Yearly or late heading date is connected with scape strategies of important diseases as Fusarium Head Blight (FHB). The heading day is set when 50% of the plants in the plot has a complete spike exposed as observed in the left plot in the image below.  
+> Heading date in wheat is associated with the timing of the floral transition and is an important agronomic trait that affects crop production. Heading and anthesis are critical periods for management strategies to cope with important diseases such as Fusarium Head Blight (FHB). We measure heading day as the Days After Planting when 50% of the plants in the plot has a complete spike exposed as observed in the left plot in the image below.  
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_HD.jpg">
@@ -798,7 +798,7 @@ labs(y="Days to Heading (day of the year)",
 
 ## Maturity 
 
-> Maturity is another important trait in plant breeding and has great potential for being measured using UAV traits because is related with greenness. For instance, vegetation indices are great tools to identify when the plants are physiological ready to be harvest. In the example below using a simple linear regression, vegetation indices were used to evaluate maturity. It is possible to identify a great moment for collecting data with UAVs (flying day) around 60 DAPs, when is already possible to observe high correlation between these traits. The genotype is considered phenotypic matured when 50% of the plants’ stems in the plot are yellow as represented on the left site in the image below. 
+> Maturity is another important trait in plant breeding and has great potential for being measured using UAV traits because is related with greenness. For instance, vegetation indices are great tools to identify when the plants are physiological ready to be harvest. In the example below using a simple linear regression, vegetation indices were used to evaluate maturity. It is possible to identify a great moment for collecting data with UAVs (flying day) around 60 DAP, when is already possible to observe high correlation between these traits. The genotype is considered phenotypically matured when 50% of the plants’ peduncle in the plot are yellow as represented on the left site in the image below. 
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_M.jpg">
@@ -868,7 +868,7 @@ ggplot(data = Data.2,
 
 ## Lodging
 
-> Lodging is the bending over of the stems near ground level of grain crops, which makes them very difficult to harvest, and can dramatically reduce yield. This trat is easily measured using the canopy height model (CHM) or estimated plant height (EPH) calculated using the digital surface model (DSM). DSM is one output from the orthomosaicking step when the images have georeferenced information or also called as gridded surface elevation. The idea is to collect images before the plants start sprouting (Soil Base) and later in the growth cycle when the plants are already grown (more information in [HERE]( https://github.com/OpenDroneMap/FIELDimageR#P10)). In the example below, images were collected at 73 DAP before a heavy rain event. Another set images were collected in the next day at 74 DAP to investigate the ability of this approach on evaluating lodging. Genotypes with high lodging scores also were among the tallest plants at 73 DAP (Upper set of boxplots in the image below). The same genotypes had a reduction of EPH measured using our UAV platform at 74 DAP after the rain (Center set of boxplots). However, later in the cycle at 80 DAP some of these genotypes had the plasticity to recover and keep upright (Lower set of boxplots). This information can be used by the breeder to infer the ability of recovering of potential tall yield genotypes. 
+> Lodging is when grain crops lose their vertical position. This makes them difficult to harvest, and can dramatically reduce yield. This trait is easily measured using the canopy height model (CHM) or estimated plant height (EPH) calculated using the digital surface model (DSM). DSM is one output from the orthomosaicking step when the images have georeferenced information or also called as gridded surface elevation. The idea is to collect images before the plants start emerging (Soil Base) and later in the growth cycle when the plants are already grown (more information in [HERE]( https://github.com/OpenDroneMap/FIELDimageR#P10)). In the example below, images were collected at 73 DAP before a heavy rain event. Another set images were collected in the next day at 74 DAP to investigate the ability of this approach on evaluating lodging. Genotypes with high lodging scores also were among the tallest plants at 73 DAP (Upper set of boxplots in the image below). The same genotypes had a reduction of EPH measured using our UAV platform at 74 DAP after the rain (Center set of boxplots). However, later in the cycle at 80 DAP some of these genotypes had the plasticity to recover and keep upright (Lower set of boxplots). This information can be used by the breeder to infer the ability of recovering of potential tall yield genotypes. 
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_L.jpg">
@@ -1021,7 +1021,7 @@ par(mfrow=c(1,1))
 
 ## UAV Data on statistic applications for YIELD selection
 
-> There are many ways to use UAV data to evaluate yield in plant breeding. Bellow we suggest three simple strategies that can be adapted to different crops. (A) The first suggestion is to use UAV-Traits as covariates in the model. (B) The second is to use AUC-UAV-Traits for indirect selection. (C) And third is to apply indirect selection using UAV-Traits from all flights, however using DAP as cofactor in the model. Please, feel free to contact us and suggest new ways of application. Using NDRE as covariate in the first strategy provided the lower Akaike information criterion (AIC) for both 55 DAP and AUC. NDRE and CANOPY provided the greater coincidence selection with yield ~ 60% using the indirect selection strategy. Selecting six flights and using the DAP as cofactor in the model increased the selection coincidence using NDRE from 60% to 65%.  
+> There are many ways to use UAV data to evaluate yield in plant breeding. Below we suggest three simple strategies that can be adapted to different crops. (A) The first suggestion is to use UAV-Traits as covariates in the model. (B) The second is to use AUC-UAV-Traits for indirect selection. (C) The third is to apply indirect selection using UAV-Traits from all flights, however using DAP as cofactor in the model. Please, feel free to contact us and suggest new ways of application. Using NDRE as covariate in the first strategy provided the lower Akaike information criterion (AIC) for both 55 DAP and AUC. NDRE and CANOPY provided the greater coincidence selection with yield ~ 60% using the indirect selection strategy. Selecting six flights and using the DAP as cofactor in the model increased the selection coincidence using NDRE from 60% to 65%.  
 
 ```r
 ##################################
