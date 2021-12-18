@@ -1294,6 +1294,14 @@ ggplot(data = Data.SC,
 
 <br />
 
+### Support and collaboration 
+
+> * [David LeBauer](https://github.com/dlebauer)
+> * [Jennifer Lachowiec](https://www.montana.edu/lachowieclab/)
+> * [Max Feldman](https://github.com/maxjfeldman)
+
+<br />
+
 ### Acknowledgments
 
 > * [Department of Plant Sciences at North Dakota State University](https://www.ndsu.edu/agriculture/academics/academic-units/plant-sciences)
