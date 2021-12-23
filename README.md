@@ -29,7 +29,7 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 
 ## Introduction 
 
-> Welcome to the **NDSU Spring Wheat Breeding Program** led by [Dr. Andrew Green](https://www.ndsu.edu/agriculture/ag-home/directory/andrew-green). In this tutorial, we will be presenting how we leverage UAV data in our breeding program. This pipeline is a compilation of [R]( https://www.r-project.org/) code and functions from different packages to implement high-throughput phenotyping methods to understand spring wheat traits.
+> Welcome to the **NDSU Spring Wheat Breeding Program** led by [Dr. Andrew Green](https://www.ndsu.edu/agriculture/ag-home/directory/andrew-green). In this tutorial, we present how we leverage UAV data in our breeding program. This pipeline is a compilation of [R]( https://www.r-project.org/) code and functions from different packages to implement high-throughput phenotyping methods to understand spring wheat traits.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_1a.jpg">
@@ -38,6 +38,8 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 <br />
 
 > Our pipeline starts by having at least one authorized drone pilot certified by the Federal Aviation Administration ([FAA]( https://www.faa.gov/)). This person needs to pass the Remote Pilot of Small Unmanned Aircraft Systems exam ([Part 107]( https://www.faa.gov/uas/commercial_operators/become_a_drone_pilot/)). The next step is getting the institution approval to collect data using UAVs. In the case of NDSU, any UAV flight related with research requires approval from the Research Operations Activities Office by filling out the [Flight Plan Form]( https://www.ndsu.edu/research/for_researchers/unmanned_aircraft_systems/). Receiving approval normally takes some time and needs to be planned ahead of the season for sufficient time before planting starts. 
+
+<br />
 > During 2021, our team used the drone [Inspire 2 from DJI]( https://www.dji.com/inspire-2) combined with the multispectral sensor [Sentera 6X]( https://sentera.com/data-capture/6x-multispectral/). Our phenotyping kit inclues three set of batteries that gives us autonomy for around one hour of flying time. The kit also has one [reflectance panel]( https://support.sentera.com/portal/en/kb/articles/capturing-your-refelectance-panel) for radiometric calibration. This step is important to transform digital numbers to radiance and then reflectance. In addition, this step allows comparing data from different days or locations, which is very common in plant breeding programs. 
 
 <p align="center">
@@ -46,11 +48,11 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 
 <br />
 
-> The flight mission was planned using the software [FieldAgent from Sentera]( https://sentera.com/fieldagent/). This is used for drawing the trial using the desktop version before going to field. Once in the flying area or trial was established, the flights parameters were set for 75% of overlapping, 15 mph, and flying height of 200 feet. There are other great open source options for DJI drones as [Pix4Dcapture]( https://support.pix4d.com/hc/en-us/articles/202557269-Pix4Dcapture-Getting-Started) and [DroneDeploy]( https://www.dronedeploy.com/product/mobile/). 
+> The flight mission was planned using the software [FieldAgent from Sentera]( https://sentera.com/fieldagent/). This software is used to draw the trial using the desktop application before going to field. Once the flying area was established, the flight parameters were set for 75% of overlapping, 15 mph, and flying height of 200 feet. There are other great open source options for DJI drones as [Pix4Dcapture]( https://support.pix4d.com/hc/en-us/articles/202557269-Pix4Dcapture-Getting-Started) and [DroneDeploy]( https://www.dronedeploy.com/product/mobile/). 
 
 <br />
 
-> For georeferencing, we have been using white plastic bucket lids (5 gallons) as ground control points (GCPs). These lids are fixed in the ground with metal landscaping stakes in the corners of the field trial at the beginning of planting season. We opted to paint the central part of the lid to facilitate finding where to click to georeferencing this point during the orthomosaic step. We also made holes to drain water from the lids. The GCPs stay in the field during the entire season and must be photographed alongside the plants for each flight or other image collection. GCPs enable a better overlap of the experimental plots and facilitate drawing grid plot polygons only once. Please find more information at this link: [https://github.com/OpenDroneMap/FIELDimageR#P5](https://github.com/OpenDroneMap/FIELDimageR#P5). 
+> For georeferencing, we use white plastic bucket lids (5 gallons) as ground control points (GCPs). These lids are fixed in the ground with metal landscaping stakes in the corners of the field trial at the beginning of the planting season. We opted to paint the central part of the lid to facilitate finding where to georeference during the orthomosaic step. We also made holes to drain water from the lids. The GCPs remain in the field during the entire growing season and must be photographed alongside the plants for each flight or other image collection. GCPs enable a better overlap of the experimental plots and facilitate drawing grid plot polygons only once. Please find more information at this link: [https://github.com/OpenDroneMap/FIELDimageR#P5](https://github.com/OpenDroneMap/FIELDimageR#P5). 
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_3.jpg">
@@ -66,7 +68,7 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 
 <br />
 
-> In this tutorial we evaluate a population of 106 white wheat lines in a second year yield trial (breeding pipeline). At the total 15 flights were collected in 2021 at NDSU Casselton Seed Farm in North Dakota (46.88051067579893, -97.2370382539691). All genotypes had at least two replicates, some check lines had three replicates (e.g., ALPINE, BARLOW, ELGIN-ND, FALLER, GLENN, SYINGMAR, NDSW0932, NDSW14098). The population was evaluated for maturity day (MAT_DAY), plant height (HT), days to heading (DH), lodging (LODG), and yield (YLD). All flights were performed around noon on days without clouds. The flights dates were (1) 05/11, (2) 05/23, (3) 05/26, (4) 06/01, (5) 06/07, (6) 06/10, (7) 06/17, (8) 06/22, (9) 06/25, (10) 06/28, (11) 07/01, (12) 07/13, (13) 07/19, (14) 07/20, and (15) 07/26.  
+> In this tutorial we evaluate a population of 106 white wheat lines in a second year yield trial (breeding pipeline). A the total 15 flights were flown in 2021 at NDSU Casselton Seed Farm in North Dakota (46.88051067579893, -97.2370382539691). All genotypes had at least two replicates, some check lines had three replicates (e.g., ALPINE, BARLOW, ELGIN-ND, FALLER, GLENN, SYINGMAR, NDSW0932, NDSW14098). The population was evaluated for maturity day (MAT_DAY), plant height (HT), days to heading (DH), lodging (LODG), and yield (YLD). All flights were performed around noon on days without clouds. The flights dates were (1) 05/11, (2) 05/23, (3) 05/26, (4) 06/01, (5) 06/07, (6) 06/10, (7) 06/17, (8) 06/22, (9) 06/25, (10) 06/28, (11) 07/01, (12) 07/13, (13) 07/19, (14) 07/20, and (15) 07/26.  
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_5.jpg">
@@ -74,7 +76,7 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 
 <br />
 
-> As an open source software to do the orthomosaic step we suggest the [OpenDroneMap]( https://www.opendronemap.org/) with the click and point interface [WebODM]( https://www.opendronemap.org/webodm/). A workshop tutorial video is available at [Phenome-Force YouTube Channel]( https://www.youtube.com/watch?v=U-bsA7QjzYE&t=4842s). More information is avaliable [HERE](https://github.com/OpenDroneMap/FIELDimageR/blob/master/README.md#P18).
+> Open source software we suggest for creating an orthomosaic is [OpenDroneMap]( https://www.opendronemap.org/) with the click and point interface [WebODM]( https://www.opendronemap.org/webodm/). A workshop tutorial video is available at [Phenome-Force YouTube Channel]( https://www.youtube.com/watch?v=U-bsA7QjzYE&t=4842s). More information is avaliable [HERE](https://github.com/OpenDroneMap/FIELDimageR/blob/master/README.md#P18).
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/ODM_FIELDimageR_New.jpg" width="70%" height="70%">
