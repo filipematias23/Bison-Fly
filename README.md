@@ -1,6 +1,6 @@
 # [Bison-Fly](https://github.com/filipematias23/Bison-Fly): UAV pipeline at NDSU Spring Wheat Breeding Program
 
-The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in partnership with *Drone2Phenome* ([D2P](https://www.ag2pi.org/)). In this pipeline we are presenting step by step how we have been applying UAV data in our breeding program. This is an open source R code from which anyone may use and adopt it for different crops and situation. We hope this pipeline helps you with your research and all suggestions to improve it are welcome. Help us to build this platform in partnership with all D2P community. 
+The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in partnership with *Drone2Phenome* ([D2P](https://www.ag2pi.org/)). In this pipeline we present step-by-step how we leverage UAV data in our breeding program. This is open source R code that anyone may use and adopt for different crops and situations. We hope this pipeline helps you with your research, and all suggestions to improve it are welcome. Help us to build this platform in partnership with the D2P community. 
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BisonFly.jpg" width="40%" height="40%">
@@ -12,7 +12,7 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
   
    * [Introduction](#Intro)
    * [Image analysis in R](#R1)
-   * [1. Agronomical Traits](#P1)
+   * [1. Agronomic Traits](#P1)
    * [2. UAV Traits](#P2)
    * [3. Area Under the Curve (AUC)](#P3)
    * [4. Principal component analysis (PCA)](#P4)
@@ -20,7 +20,7 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
    * [6. Heading Day](#P6)
    * [7. Maturity](#P7)
    * [8. Lodging](#P8)
-   * [9. Statistic Applications](#P9)
+   * [9. Statistical Applications](#P9)
    * [Contact](#PC)
 
 <br />
@@ -29,7 +29,7 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 
 ## Introduction 
 
-> Welcome to the **NDSU Spring Wheat Breeding Program** led by [Dr. Andrew Green](https://www.ndsu.edu/agriculture/ag-home/directory/andrew-green). In this tutorial, we will be presenting how we have been implementing UAV data in our breeding program. This pipeline is a compilation of [R]( https://www.r-project.org/) codes and functions from different packages to implement high-throughput phenotyping methods and understand spring wheat traits.
+> Welcome to the **NDSU Spring Wheat Breeding Program** led by [Dr. Andrew Green](https://www.ndsu.edu/agriculture/ag-home/directory/andrew-green). In this tutorial, we will be presenting how we leverage UAV data in our breeding program. This pipeline is a compilation of [R]( https://www.r-project.org/) code and functions from different packages to implement high-throughput phenotyping methods to understand spring wheat traits.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_1a.jpg">
@@ -37,7 +37,8 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 
 <br />
 
-> Our pipeline starts by having at least one authorized drone pilot certified by the Federal Aviation Administration ([FAA]( https://www.faa.gov/)). For instance, this person needs to take the exam for Remote Pilot of Small Unmanned Aircraft Systems ([Part 107]( https://www.faa.gov/uas/commercial_operators/become_a_drone_pilot/)). The next step is getting the institution approval to collect data using UAVs. In the case of NDSU, any UAV flight related with research needs to get approve from the Research Operations Activities Office by filling up the [Flight Plan Form]( https://www.ndsu.edu/research/for_researchers/unmanned_aircraft_systems/). This step normally takes some time and needs to be well planned ahead of the season to make sure to get approval before planting starts. During 2021, our team used the drone [Inspire 2 from DJI]( https://www.dji.com/inspire-2) combined with the multispectral sensor [Sentera 6X]( https://sentera.com/data-capture/6x-multispectral/). Our phenotyping kit is composed of three set of batteries that gives us autonomy for around one hour of flying time. The kit also has one [reflectance panel]( https://support.sentera.com/portal/en/kb/articles/capturing-your-refelectance-panel) for radiometric calibration. This step is important to transform digital numbers to radiance and then reflectance. In addition, this step allows comparing data from different days or locations, which is very common in plant breeding programs. 
+> Our pipeline starts by having at least one authorized drone pilot certified by the Federal Aviation Administration ([FAA]( https://www.faa.gov/)). This person needs to pass the Remote Pilot of Small Unmanned Aircraft Systems exam ([Part 107]( https://www.faa.gov/uas/commercial_operators/become_a_drone_pilot/)). The next step is getting the institution approval to collect data using UAVs. In the case of NDSU, any UAV flight related with research requires approval from the Research Operations Activities Office by filling out the [Flight Plan Form]( https://www.ndsu.edu/research/for_researchers/unmanned_aircraft_systems/). Receiving approval normally takes some time and needs to be planned ahead of the season for sufficient time before planting starts. 
+> During 2021, our team used the drone [Inspire 2 from DJI]( https://www.dji.com/inspire-2) combined with the multispectral sensor [Sentera 6X]( https://sentera.com/data-capture/6x-multispectral/). Our phenotyping kit inclues three set of batteries that gives us autonomy for around one hour of flying time. The kit also has one [reflectance panel]( https://support.sentera.com/portal/en/kb/articles/capturing-your-refelectance-panel) for radiometric calibration. This step is important to transform digital numbers to radiance and then reflectance. In addition, this step allows comparing data from different days or locations, which is very common in plant breeding programs. 
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_2.jpg" width="70%" height="70%">
@@ -49,7 +50,7 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 
 <br />
 
-> For georeferencing, we have been using white plastic bucket lids (5 gallons) as geographic control points (GCPs). These lids are fixed in the ground with metal landscaping stakes in the corners of the field trial at the beginning of planting season. We opted to paint the central part of the lid to facilitate finding where to click to georeferencing this point during the orthomosaic step. We also made holes to drain water from the lid. The GCPs stay in the field during the entire season and must be photographed alongside with the plants for each flight or data collection. This is important because allows a better overlayer of the experimental plots and facilitate drawing the grid plot polygons only once. Please for more information read this link: [https://github.com/OpenDroneMap/FIELDimageR#P5](https://github.com/OpenDroneMap/FIELDimageR#P5). 
+> For georeferencing, we have been using white plastic bucket lids (5 gallons) as ground control points (GCPs). These lids are fixed in the ground with metal landscaping stakes in the corners of the field trial at the beginning of planting season. We opted to paint the central part of the lid to facilitate finding where to click to georeferencing this point during the orthomosaic step. We also made holes to drain water from the lids. The GCPs stay in the field during the entire season and must be photographed alongside the plants for each flight or other image collection. GCPs enable a better overlap of the experimental plots and facilitate drawing grid plot polygons only once. Please find more information at this link: [https://github.com/OpenDroneMap/FIELDimageR#P5](https://github.com/OpenDroneMap/FIELDimageR#P5). 
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_3.jpg">
@@ -57,7 +58,7 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 
 <br />
 
-> Another simple idea to facilitate finding the corners on the field trial and draw the experimental plot polygons is to use four of the same plastic lids as extra points between borders and plots. This is an easy way to find where to click when using the function fieldShape() from [FIELDimageR]( https://github.com/OpenDroneMap/FIELDimageR#P5). Also, this method helps to identify where are the boundaries of multiple experimental trials plated in sequence as highlighted in the example below from our breeding program.
+> Another simple way to find the corners on a field trial and draw the experimental plot polygons is to use four of the same plastic lids as extra points between borders and plots. This is an easy way to find where to click when using the function fieldShape() from [FIELDimageR]( https://github.com/OpenDroneMap/FIELDimageR#P5). Also, this method helps to identify where the boundaries of multiple experimental trials planted in sequence as highlighted in the example below from our breeding program.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_4.jpg">
