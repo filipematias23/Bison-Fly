@@ -143,6 +143,11 @@ Field_DSM <- list.files("./DSM/") # 15 DSM orthomosaics
 Test <- stack(paste("./5band/",Field[4],sep = ""))
 plotRGB(FIELDimageR:::RGB.rescale(Test,3))
 
+```
+
+> The plot shape file can be drawn by selecting at least four points at the corners of the experiment. The number of columns and rows must be informed. At this point the experimental borders can be eliminated as shwing in the example bellow. You can download the Grid-Polygons-Plot in a shapefile format for comparations with your method on [HERE](https://drive.google.com/file/d/19zMxlGbfmJ3_Lhgbtnh4dtb36pF_hZKg/view?usp=sharing)
+
+```r
 ##########################
 ### Plot Polygons Grid ###
 ##########################
@@ -162,6 +167,10 @@ plot(Shapefile, border="green",add=T)
 ### Saving Shapefile ###
 library(rgdal)
 writeOGR(Shapefile, ".", "Shapefile", driver="ESRI Shapefile")
+# Shapefile <- readOGR("Shapefile.shp") # Reading the saved shapefile.
+
+### If you downloaded the example in the descriptions above use this code to read the shapefile:
+# Shapefile <- readOGR("./Shapefile/Shapefile.shp") # Reading the saved shapefile.
 
 ```
 
