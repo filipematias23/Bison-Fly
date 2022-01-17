@@ -98,7 +98,7 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 
 **Steps:**
 * Necessary packages
-* Uploading orthomosaics
+* Uploading orthomosaics and unzip (save all files in the same directory)
 * Drawing polygons grid ("Shapefile")
 * Removing soil (Evaluate canopy coverage)
 * Extracting data for 14 flights in a loop (UAV traits: calculating vegetation indices and plant height)
@@ -170,6 +170,7 @@ writeOGR(Shapefile, ".", "Shapefile", driver="ESRI Shapefile")
 # Shapefile <- readOGR("Shapefile.shp") # Reading the saved shapefile.
 
 ### If you downloaded the example in the descriptions above use this code to read the shapefile:
+# unzip("Shapefile.zip")
 # Shapefile <- readOGR("./Shapefile/Shapefile.shp") # Reading the saved shapefile.
 
 ```
