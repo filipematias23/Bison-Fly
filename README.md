@@ -108,6 +108,14 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 ### Bison-Fly: Plant Breeding Pipeline ###
 ##########################################
 
+### Install Packages ###
+requiredPackages = c("devtools","raster","rgdal","ggplot2","DescTools","lme4","emmeans","reshape2","car","plyr","factoextra","ggrepel","agricolae","corrplot","RStoolbox","gridExtra")
+for(p in requiredPackages){
+  if(!require(p,character.only = TRUE)) install.packages(p)
+  library(p,character.only = TRUE)
+}
+devtools::install_github("filipematias23/FIELDimageR")
+
 ### Necessary packages ###
 library(FIELDimageR)
 library(raster)
