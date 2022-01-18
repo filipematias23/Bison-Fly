@@ -308,7 +308,8 @@ Trait<-c("MAT_DAY","HT","DH","LODG","YLD")
 H2.AG<-NULL
 for(t in 1:length(Trait)){
   Data1<-droplevels(Data[!is.na(Data[,colnames(Data)==Trait[t]]),])
-  mod<-lmer(eval(parse(text = paste(Trait[t],"~RANGE+ROW+(1|NAME)",sep=""))),data = Data1)
+  # mod<-lmer(eval(parse(text = paste(Trait[t],"~RANGE+ROW+(1|NAME)",sep=""))),data = Data1)
+  mod<-lmer(eval(parse(text = paste(Trait[t],"~(1|NAME)",sep=""))),data = Data1)
   Var1<-as.data.frame(VarCorr(mod))$vcov
   names(Var1)<-as.data.frame(VarCorr(mod))$grp
   H2.AG<-rbind(H2.AG,data.frame(Trait=Trait[t],
@@ -316,7 +317,8 @@ for(t in 1:length(Trait)){
                                            Var1[2]/2 #2 replicates
                           )),3)
                           ))
-  mod<-lm(eval(parse(text = paste(Trait[t],"~RANGE+ROW+NAME",sep=""))),data = Data1)
+  # mod<-lm(eval(parse(text = paste(Trait[t],"~RANGE+ROW+NAME",sep=""))),data = Data1)
+  mod<-lm(eval(parse(text = paste(Trait[t],"~NAME",sep=""))),data = Data1)
   Adj.Mean<-emmeans(mod, ~ NAME)
   if(t==1){
     Pheno.AG<-as.data.frame(Adj.Mean)[,c(1,2)]
@@ -392,12 +394,14 @@ Pheno.UAV<-list()
 for(t1 in 1:length(DAP)){
   Data<-droplevels(DataTotal[DataTotal$DAP==DAP[t1],])
   for(t2 in 1:length(Trait.UAV)){
-    mod<-lmer(eval(parse(text = paste(Trait.UAV[t2]," ~ RANGE+ROW+(1|NAME)",sep=""))),data = Data)
+    # mod<-lmer(eval(parse(text = paste(Trait.UAV[t2]," ~ RANGE+ROW+(1|NAME)",sep=""))),data = Data)
+    mod<-lmer(eval(parse(text = paste(Trait.UAV[t2]," ~ (1|NAME)",sep=""))),data = Data)
     H2.UAV<-rbind(H2.UAV,cbind(DAP=DAP[t1],
                                Trait=Trait.UAV[t2],
                                H2=round(as.data.frame(VarCorr(mod))$vcov[1]/sum(as.data.frame(VarCorr(mod))$vcov[1],
                                                                                 as.data.frame(VarCorr(mod))$vcov[2]/2),3)))
-    mod<-lm(eval(parse(text = paste(Trait.UAV[t2],"~RANGE+ROW+NAME",sep=""))),data = Data)
+    # mod<-lm(eval(parse(text = paste(Trait.UAV[t2],"~RANGE+ROW+NAME",sep=""))),data = Data)
+    mod<-lm(eval(parse(text = paste(Trait.UAV[t2],"~NAME",sep=""))),data = Data)
     Adj.Mean<-emmeans(mod, ~ NAME)
     if(t2==1){
       Pheno.UAV.1<-as.data.frame(Adj.Mean)[,c(1,2)]
@@ -568,7 +572,8 @@ DataAUC$NAME<-as.factor(DataAUC$NAME)
 H2.AUC<-NULL
 for(t in 1:length(Trait)){
   Data1<-droplevels(DataAUC[as.character(DataAUC$TRAIT)==Trait[t],])
-  mod<-lmer(AUC~RANGE+ROW+(1|NAME),data = Data1)
+  # mod<-lmer(AUC~RANGE+ROW+(1|NAME),data = Data1)
+  mod<-lmer(AUC~(1|NAME),data = Data1)
   Var1<-as.data.frame(VarCorr(mod))$vcov
   names(Var1)<-as.data.frame(VarCorr(mod))$grp
   H2.AUC<-rbind(H2.AUC,data.frame(Trait=Trait[t],
@@ -576,7 +581,8 @@ for(t in 1:length(Trait)){
                                                          Var1[2]/2 #2 replicates
                                   )),3)
   ))
-  mod<-lm(AUC~RANGE+ROW+NAME,data = Data1)
+  # mod<-lm(AUC~RANGE+ROW+NAME,data = Data1)
+  mod<-lm(AUC~NAME,data = Data1)
   Adj.Mean<-emmeans(mod, ~ NAME)
   if(t==1){
     Pheno.AUC<-as.data.frame(Adj.Mean)[,c(1,2)]
@@ -1062,7 +1068,8 @@ Data$RANGE<-as.factor(Data$RANGE)
 Data$ROW<-as.factor(Data$ROW)
 Data$NAME<-as.factor(Data$NAME)
 # Mixed model:
-mod<-lmer(YLD~RANGE+ROW+(1|NAME),data = Data)
+# mod<-lmer(YLD~RANGE+ROW+(1|NAME),data = Data)
+mod<-lmer(YLD~(1|NAME),data = Data)
 # AIC (Comparing models):
 (Yield.AIC<-AIC(mod))
 # Residuals visualization:
@@ -1083,7 +1090,8 @@ Data$RANGE<-as.factor(Data$RANGE)
 Data$ROW<-as.factor(Data$ROW)
 Data$NAME<-as.factor(Data$NAME)
 # Mixed model:
-mod<-lmer(eval(parse(text = paste("YLD~",Trait[i],"+RANGE+ROW+(1|NAME)",sep=""))),data = Data)
+# mod<-lmer(eval(parse(text = paste("YLD~",Trait[i],"+RANGE+ROW+(1|NAME)",sep=""))),data = Data)
+mod<-lmer(eval(parse(text = paste("YLD~",Trait[i],"+(1|NAME)",sep=""))),data = Data)
 # AIC (Comparing models):
 Data.AIC<-rbind(Data.AIC,cbind(Trait=Trait[i],AIC=AIC(mod), Model="55DAP")) 
 # Residuals visualization:
@@ -1097,7 +1105,8 @@ Data$RANGE<-as.factor(Data$RANGE)
 Data$ROW<-as.factor(Data$ROW)
 Data$NAME<-as.factor(Data$NAME)
 # Mixed model:
-mod<-lmer(YLD~AUC+RANGE+ROW+(1|NAME),data = Data)
+# mod<-lmer(YLD~AUC+RANGE+ROW+(1|NAME),data = Data)
+mod<-lmer(YLD~AUC+(1|NAME),data = Data)
 # AIC (Comparing models):
 Data.AIC<-rbind(Data.AIC,cbind(Trait=Trait[i],AIC=AIC(mod), Model="AUC")) 
 # Residuals visualization:
@@ -1150,7 +1159,8 @@ Data$RANGE<-as.factor(Data$RANGE)
 Data$ROW<-as.factor(Data$ROW)
 Data$NAME<-as.factor(Data$NAME)
 # Mixed model:
-mod<-lmer(YLD~RANGE+ROW+(1|NAME),data = Data)
+# mod<-lmer(YLD~RANGE+ROW+(1|NAME),data = Data)
+mod<-lmer(YLD~(1|NAME),data = Data)
 # BLUPs:
 BLUP.Pheno<-as.matrix(ranef(mod)$NAME)
 # Ranking:
@@ -1169,7 +1179,8 @@ for(i in 1:length(Trait)){
   Data$ROW<-as.factor(Data$ROW)
   Data$NAME<-as.factor(Data$NAME)
 # Mixed model:
-  mod<-lmer(AUC~RANGE+ROW+(1|NAME),data = Data)
+  # mod<-lmer(AUC~RANGE+ROW+(1|NAME),data = Data)
+  mod<-lmer(AUC~(1|NAME),data = Data)
 # BLUPs:
   BLUP.AUC<-as.matrix(ranef(mod)$NAME)
 # Ranking:
@@ -1225,7 +1236,8 @@ Data$RANGE<-as.factor(Data$RANGE)
 Data$ROW<-as.factor(Data$ROW)
 Data$NAME<-as.factor(Data$NAME)
 # Mixed model:
-mod<-lmer(YLD~RANGE+ROW+(1|NAME),data = Data)
+# mod<-lmer(YLD~RANGE+ROW+(1|NAME),data = Data)
+mod<-lmer(YLD~(1|NAME),data = Data)
 # BLUPs:
 BLUP.Pheno<-as.matrix(ranef(mod)$NAME)
 # Ranking:
@@ -1246,7 +1258,8 @@ Trait<-c("NGRDI","NDRE","CIRE","Canopy","Height_50","Height_90")
 Data.SC<-NULL
 for(i in 1:length(Trait)){
   # Mixed model:
-  mod<-lmer(eval(parse(text = paste(Trait[i]," ~ DAP+RANGE+ROW+(1|NAME)",sep=""))),data = DataTotal)
+  # mod<-lmer(eval(parse(text = paste(Trait[i]," ~ DAP+RANGE+ROW+(1|NAME)",sep=""))),data = DataTotal)
+  mod<-lmer(eval(parse(text = paste(Trait[i]," ~ DAP+(1|NAME)",sep=""))),data = DataTotal)
   # BLUPs:
   BLUP.UAV<-as.matrix(ranef(mod)$NAME)
   # Ranking:
