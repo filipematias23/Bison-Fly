@@ -103,6 +103,10 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 * Removing soil (Evaluate canopy coverage)
 * Extracting data for 14 flights in a loop (UAV traits: calculating vegetation indices and plant height)
 
+<br />
+
+> In order to run this tutorial, you need to install [R](https://www.r-project.org/) and [RStudio](https://www.rstudio.com/). For Windows users who have an R version higher than 4.0, you need to install [RTools](https://cran.r-project.org/bin/windows/Rtools/rtools40.html).
+
 ```r
 ##########################################
 ### Bison-Fly: Plant Breeding Pipeline ###
