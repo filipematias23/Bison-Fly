@@ -40,6 +40,7 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 > Our pipeline starts by having at least one authorized drone pilot certified by the Federal Aviation Administration ([FAA]( https://www.faa.gov/)). This person needs to pass the Remote Pilot of Small Unmanned Aircraft Systems exam ([Part 107]( https://www.faa.gov/uas/commercial_operators/become_a_drone_pilot/)). The next step is getting the institution approval to collect data using UAVs. In the case of NDSU, any UAV flight related with research requires approval from the Research Operations Activities Office by filling out the [Flight Plan Form]( https://www.ndsu.edu/research/for_researchers/unmanned_aircraft_systems/). Receiving approval normally takes some time and needs to be planned ahead of the season for sufficient time before planting starts. 
 
 <br />
+
 > During 2021, our team used the drone [Inspire 2 from DJI]( https://www.dji.com/inspire-2) combined with the multispectral sensor [Sentera 6X]( https://sentera.com/data-capture/6x-multispectral/). Our phenotyping kit inclues three set of batteries that gives us autonomy for around one hour of flying time. The kit also has one [reflectance panel]( https://support.sentera.com/portal/en/kb/articles/capturing-your-refelectance-panel) for radiometric calibration. This step is important to transform digital numbers to radiance and then reflectance. In addition, this step allows comparing data from different days or locations, which is very common in plant breeding programs. 
 
 <p align="center">
