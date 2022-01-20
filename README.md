@@ -214,6 +214,10 @@ Mask <- fieldMask(Test,
 
 <br />
 
+> Extracting data from all field images at once in a loop. The code below takes time to run. If you don't want to run it you can just **DOWNLOAD** the *'DataTotal.csv'* with extracted data on [HERE](https://drive.google.com/file/d/1_X1JE9JMd41PhgRGU56aHhHzvrAKD7mk/view?usp=sharing).
+
+<br />
+
 ```r
 ################################################
 ### Extracting data for 14 flights in a loop ###
