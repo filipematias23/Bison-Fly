@@ -187,6 +187,7 @@ writeOGR(Shapefile, ".", "Shapefile", driver="ESRI Shapefile")
 # unzip("Shapefile.zip")
 # Shapefile <- terra::vect("./Shapefile/Shapefile.shp") # Reading the saved shapefile option 01.
 # Shapefile <- readOGR("./Shapefile/Shapefile.shp") # Reading the saved shapefile.
+# plot(Shapefile, border="red")
 
 ```
 
