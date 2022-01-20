@@ -180,12 +180,10 @@ plot(Shapefile, border="green",add=T)
 ### Saving Shapefile ###
 library(rgdal)
 writeOGR(Shapefile, ".", "Shapefile", driver="ESRI Shapefile")
-# Shapefile <- terra::vect("Shapefile.shp") # Reading the saved shapefile option 01.
 # Shapefile <- readOGR("Shapefile.shp") # Reading the saved shapefile option 02.
 
 ### If you downloaded the example in the descriptions above use this code to read the shapefile:
 # unzip("Shapefile.zip")
-# Shapefile <- terra::vect("./Shapefile/Shapefile.shp") # Reading the saved shapefile option 01.
 # Shapefile <- readOGR("./Shapefile/Shapefile.shp") # Reading the saved shapefile.
 # plot(Shapefile, border="red")
 
