@@ -362,7 +362,7 @@ ggplot(data = H2.AG,
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_9.jpg" width="80%" height="80%">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_9a.jpeg" width="80%" height="80%">
 </p>
 
 <br />
@@ -449,7 +449,7 @@ ggplot(data = H2.UAV,
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_10.jpg" width="80%" height="80%">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_10a.jpeg" width="80%" height="80%">
 </p>
 
 <br />
@@ -630,7 +630,7 @@ ggplot(data = H2.AUC,
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_14.jpg" width="80%" height="80%">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_14a.jpeg" width="80%" height="80%">
 </p>
 
 <br />
@@ -689,7 +689,7 @@ fviz_pca_biplot(Pheno.PCA.2,
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_15.jpg" width="80%" height="80%">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_15a.jpeg" width="80%" height="80%">
 </p>
 
 <br />
@@ -754,7 +754,7 @@ corrplot(r$correlation,
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_16.jpg">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_16a.jpg">
 </p>
 
 <br />
@@ -1062,7 +1062,7 @@ par(mfrow=c(1,1))
 
 ## UAV Data on statistic applications for YIELD selection
 
-> There are many ways to use UAV data to evaluate yield in plant breeding. Below we suggest three simple strategies that can be adapted to different crops. (A) The first suggestion is to use UAV-Traits as covariates in the model. (B) The second is to use AUC-UAV-Traits for indirect selection. (C) The third is to apply indirect selection using UAV-Traits from all flights, however using DAP as cofactor in the model. Please, feel free to contact us and suggest new ways of application. Using NDRE as covariate in the first strategy provided the lower Akaike information criterion (AIC) for both 55 DAP and AUC methods. NDRE-AUC and CANOPY-AUC provided the greater coincidence selection with yield ~ 60% using the indirect selection strategy "B". On strategy "C", selecting six flights and using the DAP as cofactor in the model increased the selection coincidence between yield and NDRE from 60% (B) to 65% (C).  
+> There are many ways to use UAV data to evaluate yield in plant breeding. Below we suggest three simple strategies that can be adapted to different crops. (A) The first suggestion is to use UAV-Traits as covariates in the model. (B) The second is to use AUC-UAV-Traits for indirect selection. (C) The third is to apply indirect selection using UAV-Traits from all flights, however using DAP as cofactor in the model. Please, feel free to contact us and suggest new ways of application. Using NDRE as covariate in the first strategy provided the lower Akaike information criterion (AIC) for both 55 DAP and AUC methods. NDRE-AUC and CANOPY-AUC provided the greater coincidence selection with yield ~ 60% using the indirect selection strategy "B". Strategy "C" had similar performance than strategy "B", however with some inversions on selection coincidence values between NDRE and CIRE.  
 
 ```r
 ##################################
@@ -1152,7 +1152,7 @@ ggplot(data = Data.AIC,
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_23.jpg"  width="80%" height="80%">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_23a.jpeg"  width="80%" height="80%">
 </p>
 
 <br />
@@ -1229,7 +1229,7 @@ ggplot(data = Data.SC,
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_24.jpg"  width="80%" height="80%">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_24a.jpeg"  width="80%" height="80%">
 </p>
 
 <br />
@@ -1307,7 +1307,7 @@ ggplot(data = Data.SC,
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_25.jpg"  width="80%" height="80%">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_25a.jpeg"  width="80%" height="80%">
 </p>
 
 <br />
