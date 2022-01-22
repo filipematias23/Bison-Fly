@@ -682,7 +682,7 @@ fviz_pca_biplot(Pheno.PCA.2,
         legend.text = element_text(color="black",size=18),
         legend.title = element_text(color="black",size=18),
         axis.text.y = element_text(color="black",size=14),
-        axis.title = element_text(color="black",size=18),
+        # axis.title = element_text(color="black",size=18),
         axis.text.x = element_text(color="black",size=14),
         strip.text = element_text(color="black",size=18),
         strip.background = element_rect(fill="white"))
