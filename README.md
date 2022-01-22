@@ -765,7 +765,7 @@ corrplot(r$correlation,
 
 ## Heading Day
 
-> Heading date in wheat is associated with the timing of the floral transition and is an important agronomic trait that affects crop production. Heading and anthesis are critical periods for management strategies to cope with important diseases such as Fusarium Head Blight (FHB). We measure heading day as the Days After Planting when 50% of the plants in the plot has a complete spike exposed as observed in the left plot in the image below.  
+> Heading date in wheat is associated with the timing of the floral transition and is an important agronomic trait that affects crop production. Heading and anthesis are critical periods for management strategies to cope with important diseases such as Fusarium Head Blight (FHB). We measure heading day as the Days After Planting when 50% of the plants in the plot has a complete spike exposed as observed in the left plot in the image below. In the example below, only the simple regression at 49 DAP showed some connection between heading date and estimate plant height. Also, heading date in this population is a high herdable trait (around 90% as shown in the H2 for agronomical traits above) compared with any H2 observed for UAV traits. In this case, using the simple regression approach was not a good strategy to evaluate heading date.  
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_HD.jpg">
@@ -972,10 +972,14 @@ ggplot(data = Data.2,
 
 <br />
 
+> To facilitate lodging visualization using UAV we compared the same field area in two conditions, at 52 DAP (flowering time - standstill) and 74 DAP (senescence time - lodging). For instance, a great visualization tool is comparing the Digital Surface Model (DSM) from both moments to evaluate the variation on average plant height. You can DOWNLOAD the example below [HERE]().
+
 ```r
 ###################################
 ### RGB - Lodging Visualization ###
 ###################################
+
+# unzip("Lodging.zip")
 
 # 49 DAP #
 lodg.52DAP <- stack("./Lodging/RGB/10_DAP_52_2021_Casselton_YT_06-28_rgb.tif")
