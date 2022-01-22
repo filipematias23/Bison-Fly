@@ -214,7 +214,7 @@ Mask <- fieldMask(Test,
 
 <br />
 
-> Extracting data from all field images at once in a loop. The code below takes time to run. If you don't want to run it you can just **DOWNLOAD** the *'DataTotal.csv'* with extracted data on [HERE](https://drive.google.com/file/d/1_X1JE9JMd41PhgRGU56aHhHzvrAKD7mk/view?usp=sharing).
+> Extracting data from all field images at once in a loop. The code below takes time to run. If you don't want to run it you can just **DOWNLOAD** the *'DataTotal.csv'* with extracted data [HERE](https://drive.google.com/file/d/1t6ZHtbldBouJ675i8XJ1nMQm7ReFeaEd/view?usp=sharing).
 
 <br />
 
@@ -272,10 +272,10 @@ Data.names<-gsub("layer",'Height_0',colnames(DataTotal))
 Data.names<-gsub("NA..1",'Height_50',Data.names)
 Data.names<-gsub("NA..2",'Height_75',Data.names)
 Data.names<-gsub("NA..3",'Height_100',Data.names)
-Data.names<-gsub("\\NA.",'Height_25',Data.names)
+Data.names[Data.names=="NA."]<-'Height_25'
 Data.names<-gsub("objArea",'Canopy',Data.names)
 colnames(DataTotal)<-Data.names
-DataTotal<-subset(DataTotal, select = -ID.1)
+DataTotal<-DataTotal[,!colnames(DataTotal)=="ID.1"]
 DataTotal$DAP<-as.numeric(do.call(rbind,strsplit(DataTotal$Date,split = "_"))[,4])
 head(DataTotal)
 
@@ -373,7 +373,7 @@ ggplot(data = H2.AG,
 
 ## UAV Traits
 
-> In the same way presented above for agronomic traits, the code below was adapted to evaluate many UAV traits and calculate their heritability and adjusted means over time in a loop (Days After Planting - DAP). 
+> In the same way presented above for agronomic traits, the code below was adapted to evaluate many UAV traits and calculate their heritability and adjusted means over time in a loop (Days After Planting - DAP). **DOWNLOAD** the *'DataTotal.csv'* with extracted data [HERE](https://drive.google.com/file/d/1t6ZHtbldBouJ675i8XJ1nMQm7ReFeaEd/view?usp=sharing).
 
 ```r
 ##################
