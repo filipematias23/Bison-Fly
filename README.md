@@ -972,7 +972,7 @@ ggplot(data = Data.2,
 
 <br />
 
-> To facilitate lodging visualization using UAV we compared the same field area in two conditions, at 52 DAP (flowering time - standstill) and 74 DAP (senescence time - lodging). For instance, a great visualization tool is comparing the Digital Surface Model (DSM) from both moments to evaluate the variation on average plant height. You can DOWNLOAD the example below [HERE]().
+> In the example below, we compared the same area in field in two different moments of the wheat growth cycle to facilitate lodging visualization using UAV. The first flight was at 52 DAP during the flowering time (all genotypes standing) and the second flight at 74 DAP during the senescence time (some genotypes with lodging). For instance, a great visualization tool is comparing the *Digital Surface Model (DSM)* from both moments to evaluate the variation on average plant height. You can **DOWNLOAD** the example below [**HERE**]().
 
 ```r
 ###################################
