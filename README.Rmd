@@ -106,15 +106,19 @@ The first step is to **DOWNLOAD** the data used in this tutorial by clicking [**
 The following code is an example how to prepare the images to extract the UAV data with biological meaning for posterior breeding applications.
 
 **Steps:**
-* Load necessary R packages
-* Download orthomosaics and unzip (save all files in the same directory)
-* Draw the grid of plot polygons and generate a Shapefile or geopackage
-* Create a soil mask to evaluate canopy cover
-* Run a loop to extracting data for 14 flights in (UAV traits: calculating vegetation indices and plant height)
+1. Load necessary R packages
+2. Download orthomosaics and unzip them into your current working directory (save all files in the same directory)
+3. Draw the grid of plot polygons and generate a Shapefile or geopackage
+4. Create a soil mask to evaluate canopy cover
+5. Run a loop to extracting data for 14 flights in (UAV traits: calculating vegetation indices and plant height)
 
 <br />
 
 In order to run this tutorial, you need to install [R](https://www.r-project.org/) and [RStudio](https://www.rstudio.com/). For Windows users who have an R version higher than 4.0, you need to install [RTools](https://cran.r-project.org/bin/windows/Rtools/rtools40.html).
+
+### 1. Load R libraries
+
+The first step will be to make sure all of the required libraries for the tutorial are installed and then load them.
 
 ```{r}
 ##########################################
@@ -146,55 +150,90 @@ library(agricolae)
 library(corrplot)
 library(RStoolbox)
 library(gridExtra)
+```
+
+### 2. Download and extract data
+
+Next, we can download, unzip, and look at the data.
+
+```{r view figures}
 
 #####################################
 ### NDSU - Spring Wheat UAV Data  ###
 #####################################
+#download.file(path/to/NDSU_WheatData_UAV_2021.zip)
+#unzip("NDSU_WheatData_UAV_2021.zip")
 
 ### List of orthomosaics ###
-Field <- list.files("./5band/") # 15 5band orthomosaics
-Field_RGB <- list.files("./RGB/") # 15 RGB orthomosaics
-Field_DSM <- list.files("./DSM/") # 15 DSM orthomosaics
+Field <- list.files("NDSU_WheatData_UAV_2021/5band/", full.names = TRUE) # 15 5band orthomosaics
+Field_RGB <- list.files("NDSU_WheatData_UAV_2021/RGB/", full.names = TRUE) # 15 RGB orthomosaics
+Field_DSM <- list.files("NDSU_WheatData_UAV_2021/DSM/", full.names = TRUE) # 15 DSM orthomosaics
 
+stopifnot(length(Field_RGB) == 15 &&
+            length(Field_DSM) == 15 && 
+            length(Field) == 15)
 ######################################################
 ### Using one orthomosaic as base to draw the grid ###
 ######################################################
 
 ### Suggested strategy of using lids to highlight where to click ###
-Test <- stack(paste("./5band/",Field[4],sep = ""))
+Test <- stack(Field[4])
 plotRGB(FIELDimageR:::RGB.rescale(Test,3))
 
 ```
 
-> The plot shape file can be drawn by selecting at least four points at the corners of the experiment. The number of columns and rows must be informed. At this point the experimental borders can be eliminated as shwing in the example bellow. You can download the Grid-Polygons-Plot in a shapefile format for comparations with your method on [HERE](https://drive.google.com/file/d/19zMxlGbfmJ3_Lhgbtnh4dtb36pF_hZKg/view?usp=sharing)
+### 3. Generate a map of plot polygons
 
-```{r}
+The plot polygons can be drawn by selecting at least four points at the corners of the experiment. The number of columns and rows must be specified as arguments to the `fieldShape` function. At this point, the experimental borders can be eliminated as showing in the example bellow. 
+
+The plot polygons are provided in the data repository as both a "shapefile" (Grid-Polygons-Plot.zip) and a "geopackage" (Grid-Polygons-Plot.geopackage). These were created using the steps below. These steps are interactive, and require you to locate the corners of the fields.
+
+A geopackage is an Open Geospatial Consortium standards-compliant file type; you can learn more at the website [geopackage.org](https://www.geopackage.org/). A geopackage is a SQLite database with a specific schema that contains the same information as a shapefile, and is OGC-Compliant. A shapefile is actually a collection of files, and is a widely used but proprietary format developed by ESRI, the company that makes ArcGIS.
+
+First load the data
+
+```{r }
 ##########################
 ### Plot Polygons Grid ###
 ##########################
 
-Data <- read.csv("EX_DATA.csv",header = T,fileEncoding="UTF-8-BOM")
-Map <- read.csv("EX_MAP.csv",header = F,fileEncoding="UTF-8-BOM")
+Data <- read.csv("NDSU_WheatData_UAV_2021/EX_DATA.csv",
+                 header = TRUE,
+                 fileEncoding = "UTF-8-BOM")
+Map <- read.csv("NDSU_WheatData_UAV_2021/EX_MAP.csv",
+                header = FALSE,
+                fileEncoding = "UTF-8-BOM")
+```
+
+Next (optional), generate and save the polygons using an interactive plot. This is optional because the plot polygon file is provided in the data archive, but the code to demonstrate how to do it is shown below: 
+
+```{r eval=FALSE}
+## Display the field in a viewer. NB: this does not run in Rmarkdown, it must be run on the console to allow user input 
 Shapefile <- fieldShape(mosaic = Test,
                         ncols = 11,
                         nrows = 20,
                         fieldData = Data,
                         ID = "PLOT",
                         fieldMap = Map)
-Shapefile<-Shapefile$fieldShape
-plotRGB(FIELDimageR:::RGB.rescale(Test,3))
-plot(Shapefile, border="green",add=T)
+rgdal::writeOGR(obj = Shapefile$fieldShape,
+                dsn = 'NDSU_WheatData_UAV_2021/shapefile',
+                layer = 'Grid-Polygons-Plot',
+                driver = "ESRI Shapefile")
 
-### Saving Shapefile ###
-library(rgdal)
-writeOGR(Shapefile, ".", "Shapefile", driver="ESRI Shapefile")
-# Shapefile <- terra::vect("Shapefile.shp") # Reading the saved shapefile option 01.
-# Shapefile <- readOGR("Shapefile.shp") # Reading the saved shapefile option 02.
+rgdal::writeOGR(obj = Shapefile$fieldShape,
+                dsn = 'NDSU_WheatData_UAV_2021/Grid-Polygons-Plot.gpkg',
+                layer = 'Grid-Polygons-Plot',
+                driver = "GPKG")
+```
 
-### If you downloaded the example in the descriptions above use this code to read the shapefile:
-# unzip("Shapefile.zip")
-# Shapefile <- terra::vect("./Shapefile/Shapefile.shp") # Reading the saved shapefile option 01.
-# Shapefile <- readOGR("./Shapefile/Shapefile.shp") # Reading the saved shapefile.
+```{r fig.keep='all'}
+# Shapefile <- Shapefile$fieldShape
+Shapefile <- rgdal::readOGR('NDSU_WheatData_UAV_2021/Grid-Polygons-Plot.gpkg')
+{ # wrapping in curly braces to avoid error 
+  # https://stackoverflow.com/a/41947860/199217
+  plotRGB(FIELDimageR:::RGB.rescale(Test, 3))
+  plot(Shapefile, border="green", add = TRUE)
+}
 
 ```
 
@@ -228,21 +267,29 @@ Mask <- fieldMask(Test,
 ### Extracting data for 14 flights in a loop ###
 ################################################
 
-DataTotal<-NULL
+DataTotal <- NULL
 for(i in 2:length(Field)){
   print(paste("===",Field[i],"==="))
-  EX <- stack(paste("./5band/",Field[i],sep = ""))
-  EX.1 <- fieldMask(EX,plot = F)
-  EX.I <- fieldIndex(mosaic = EX,Red = 3,Green = 2,Blue = 1,RedEdge = 4,NIR = 5,
-                     index = c("NGRDI","BGI","GLI","NDVI","NDRE","CIG","CIRE"),plot = F)
-  crs(Shapefile)<-crs(EX.I)
-  EX.I<- fieldInfo(mosaic = EX.I,
+  EX <- stack(paste("./5band/", 
+                    Field[i], 
+                    sep = ""))
+  EX.1 <- fieldMask(EX, plot = FALSE)
+  EX.I <- fieldIndex(mosaic = EX, 
+                     Red = 3,
+                     Green = 2,
+                     Blue = 1,
+                     RedEdge = 4,
+                     NIR = 5,
+                     index = c("NGRDI", "BGI", "GLI", "NDVI", "NDRE", "CIG"," CIRE"), 
+                     plot = FALSE)
+  crs(Shapefile) <- crs(EX.I)
+  EX.I <- fieldInfo(mosaic = EX.I,
                    fieldShape = Shapefile,
                    buffer = -0.05,
                    n.core = 3)
   # Canopy Cover
-  EX.I<-fieldArea(mosaic = EX.1$mask, 
-                  fieldShape = EX.I$fieldShape,plot = F)
+  EX.I <- fieldArea(mosaic = EX.1$mask, 
+                  fieldShape = EX.I$fieldShape, plot = FALSE)
   # EPH
   DSM0 <- stack(paste("./DSM/",Field_DSM[1],sep = ""))
   DSM1 <- stack(paste("./DSM/",Field_DSM[i],sep = ""))
