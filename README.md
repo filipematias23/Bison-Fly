@@ -89,7 +89,10 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 
 ## Image analysis in R
 
-> The first step is to **DOWNLOAD** the data used in this tutorial by clicking [**HERE**](https://drive.google.com/file/d/1_Uj3oaiSv31WpbGyyUCfKiKhAqQ_jPUN/view?usp=sharing). The folder has 15 Multispectral orthomosaics, 15 RGB orthomosaics, 15 DSM orthomosaics, 1 CSV file with agronomical field data, and 1 CSV file with the plots' ID map.
+> The first step is to **DOWNLOAD** the data used in this tutorial by clicking [**HERE**](https://drive.google.com/file/d/1_Uj3oaiSv31WpbGyyUCfKiKhAqQ_jPUN/view?usp=sharing). The folder has 15 Multispectral orthomosaics, 15 RGB orthomosaics, 15 DSM orthomosaics, 1 CSV file with agronomical field data, and 1 CSV file with the plots' ID map. 
+
+* Orthomosaics metadata is avaliable [HERE](https://docs.google.com/spreadsheets/d/1E2jmO3Su38PYQ-5FHZkYjH4VgSlFvvNa/edit?usp=sharing&ouid=108197715650347930652&rtpof=true&sd=true) 
+* Hourly weather and soil data from 7-May-2021 to 7-August-2021 is available [HERE](https://drive.google.com/file/d/1gedPmoVb7LVdZBxmGrN1vllHQqZaalpc/view?usp=sharing). This data was collected in Prosper/ND (NDSU Station) at the closest station from Casselton/ND (experimental fields in this tutorial). 
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_0.jpg" width="50%" height="50%">
