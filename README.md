@@ -729,8 +729,28 @@ fviz_pca_biplot(Pheno.PCA.2,
 # 31 DAP (MAT_DAY)
 # 46 DAP (YLD)
 # 49 DAP (DH)
-# 74 DAP (LODG)
+# 74 DAP (LODG) and 73 DAP (1 day before heavy storm)
 
+### 73 DAP ###
+Pheno.UAV.2<-Pheno.UAV$`73`[,c("NAME","NGRDI", "NDRE", "CIRE","Canopy","Height_50","Height_90")]
+Pheno.COR<-merge(Pheno.AG,Pheno.UAV.2,by="NAME")
+Pheno.COR.1<-scale(Pheno.COR[,-1],scale = T)
+rownames(Pheno.COR.1)<-Pheno.COR[,1]
+
+### r (73 DAP) ###
+r<-correlation(Pheno.COR.1)
+r$correlation
+round(r$pvalue,2)
+col <- colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))
+corrplot(r$correlation, 
+         p.mat = r$pvalue,
+         sig.level = 0.05, # Level of significance 5%
+         method="color", col=col(200),  
+         type="upper", order="alphabet",addCoef.col = "black", 
+         tl.col="black", tl.srt=45, 
+         insig = "blank", 
+         diag=FALSE)
+         
 ### 74 DAP ###
 Pheno.UAV.2<-Pheno.UAV$`74`[,c("NAME","NGRDI", "NDRE", "CIRE","Canopy","Height_50","Height_90")]
 Pheno.COR<-merge(Pheno.AG,Pheno.UAV.2,by="NAME")
@@ -746,7 +766,7 @@ corrplot(r$correlation,
          p.mat = r$pvalue,
          sig.level = 0.05, # Level of significance 5%
          method="color", col=col(200),  
-         type="upper", order="hclust",addCoef.col = "black", 
+         type="upper", order="alphabet",addCoef.col = "black", 
          tl.col="black", tl.srt=45, 
          insig = "blank", 
          diag=FALSE)
@@ -765,7 +785,7 @@ corrplot(r$correlation,
          p.mat = r$pvalue,
          sig.level = 0.1,
          method="color", col=col(200),  
-         type="upper", order="hclust",addCoef.col = "black", 
+         type="upper", order="alphabet",addCoef.col = "black", 
          tl.col="black", tl.srt=45, 
          insig = "blank", 
          diag=FALSE)
