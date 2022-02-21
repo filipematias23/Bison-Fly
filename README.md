@@ -1161,7 +1161,7 @@ Data.AIC<-rbind(Data.AIC,cbind(Trait=Trait[i],AIC=AIC(mod), Model="AUC"))
 qqPlot(residuals(mod))
 }
 Data.AIC<-as.data.frame(Data.AIC)
-Data.AIC$AIC<-as.numeric(Data.AIC$AIC)
+Data.AIC$AIC<-as.numeric(as.character(Data.AIC$AIC))
 
 ### AIC visualization ###
 ggplot(data = Data.AIC, 
@@ -1238,7 +1238,7 @@ for(i in 1:length(Trait)){
   Data.SC<-rbind(Data.SC,cbind(Trait=Trait[i],SC=sum(Sel.Pheno[1:n.sel]%in%Sel.AUC[1:n.sel])/n.sel))
 }
 Data.SC<-as.data.frame(Data.SC)
-Data.SC$SC<-as.numeric(Data.SC$SC)
+Data.SC$SC<-as.numeric(as.character(Data.SC$SC))
 
 # Indirect selection coincidence:
 ggplot(data = Data.SC, 
@@ -1317,7 +1317,7 @@ for(i in 1:length(Trait)){
   Data.SC<-rbind(Data.SC,cbind(Trait=Trait[i],SC=sum(Sel.Pheno[1:n.sel]%in%Sel.UAV[1:n.sel])/n.sel))
 }
 Data.SC<-as.data.frame(Data.SC)
-Data.SC$SC<-as.numeric(Data.SC$SC)
+Data.SC$SC<-as.numeric(as.character(Data.SC$SC))
 
 # Indirect selection coincidence:
 ggplot(data = Data.SC, 
