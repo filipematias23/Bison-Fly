@@ -562,7 +562,7 @@ DataAUC<-fieldAUC(data = Data,
                   trait = Trait,
                   keep.columns = colnames(Data)[2:27],
                   frame = "long")
-DataAUC$AUC<-as.numeric(DataAUC$AUC)
+DataAUC$AUC<-as.numeric(as.character(DataAUC$AUC))
 DataAUC$TRAIT<-factor(DataAUC$TRAIT,levels = Trait)
 DataAUC$NAME<-as.factor(DataAUC$NAME)
 DataAUC$RANGE<-as.factor(DataAUC$RANGE)
