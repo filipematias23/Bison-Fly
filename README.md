@@ -546,7 +546,7 @@ ggplot(data=Data2, aes(x=as.numeric(DAP), y= NDVI, col= NAME, group=NAME)) +
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_12.jpg" width="80%" height="80%">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_Curve_New.jpeg" width="80%" height="80%">
 </p>
 
 <br />
@@ -707,7 +707,7 @@ fviz_pca_biplot(Pheno.PCA.2,
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_15a.jpeg" width="80%" height="80%">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_PCA_New.jpeg" width="80%" height="80%">
 </p>
 
 <br />
