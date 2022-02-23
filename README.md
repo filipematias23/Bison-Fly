@@ -524,8 +524,8 @@ ggplot(Data,
 #########################
 
 ### Choosing genotypes to highlight ###
-unique(Data$NAME) # "FALLER","SYINGMAR","NDVITPRO"
-Data1<-Data[as.character(Data$NAME)%in%c("FALLER","SYINGMAR","NDVITPRO"),]
+unique(Data$NAME) # "FALLER","GLENN","NDVITPRO"
+Data1<-Data[as.character(Data$NAME)%in%c("FALLER","GLENN","NDVITPRO"),]
 Data2<-ddply(Data1,NAME~DAP,summarise,NDVI=mean(NDVI))
 ggplot(data=Data2, aes(x=as.numeric(DAP), y= NDVI, col= NAME, group=NAME)) +
   geom_point(size=6)+
@@ -676,7 +676,7 @@ rownames(Pheno.PCA.1)<-Pheno.PCA$NAME
 Pheno.PCA.2 <- prcomp(Pheno.PCA.1, center = TRUE, scale = TRUE)
 
 ### Highlighting checks ###
-checks<-c("NDSW0932","NDSW14098","NDVITPRO","SYINGMAR","ALPINE","BARLOW","ELGIN-ND","FALLER","GLENN","MAX")
+checks<-c("NDSW0932","NDSW14098","NDVITPRO","CHECK_01","CHECK_02","BARLOW","ELGIN-ND","FALLER","GLENN","MAX")
 groups <- as.character(Pheno.PCA$NAME)
 groups[groups%in%checks]<-"Checks"
 groups[groups!="Checks"]<-"Lines"
