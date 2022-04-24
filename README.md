@@ -687,14 +687,14 @@ groups.text[!groups.text%in%checks]<-""
 fviz_pca_biplot(Pheno.PCA.2,
              col.ind = groups, # color by groups
              legend.title = "",
-             palette = c("black", "gray55"),
+             palette = c("black", "gray70"),
              repel = TRUE,
              geom.ind = "point",mean.point=F,
-             pointshape = 21,
              pointsize = 3,
              fill.ind = groups
              )+
   geom_text_repel(aes(label = groups.text),size = 3.5)+
+  scale_shape_manual(values=c(17,21))+
   theme(legend.position = "right",
         legend.direction = "vertical",
         legend.text = element_text(color="black",size=18),
@@ -707,7 +707,7 @@ fviz_pca_biplot(Pheno.PCA.2,
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_PCA_New.jpeg" width="80%" height="80%">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_PCA_New2.jpeg" width="80%" height="80%">
 </p>
 
 <br />
