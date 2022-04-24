@@ -772,6 +772,7 @@ corrplot(r$correlation,
          diag=FALSE)
 
 ### AUC ###
+Pheno.AUC<-Pheno.AUC[,c("NAME","NGRDI", "NDRE", "CIRE","Canopy","Height_50","Height_90")]
 Pheno.COR<-merge(Pheno.AG,Pheno.AUC,by="NAME")
 Pheno.COR.1<-scale(Pheno.COR[,-1],scale = T)
 rownames(Pheno.COR.1)<-Pheno.COR[,1]
@@ -792,7 +793,7 @@ corrplot(r$correlation,
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_16a.jpg">
+  <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/BF_16_New.jpg">
 </p>
 
 <br />
