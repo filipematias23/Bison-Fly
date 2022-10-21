@@ -1370,7 +1370,7 @@ ggplot(data = Data.SC,
 
 ### Citation
 
-> coming soon...
+> Filipe Inácio Matias, Andrew Green, Jennifer A Lachowiec, David LeBauer, Max Feldman. Bison-Fly: An open-source UAV pipeline for plant breeding data collection. The Plant Phenome Journal, 2022. [https://doi.org/10.1002/ppj2.20048](https://doi.org/10.1002/ppj2.20048)
 
 <br />
 
