@@ -10,22 +10,22 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 
 ## Resources
   
-   * [Introduction](#Intro)
-   * [Image analysis in R](#R1)
-   * [1. Agronomic Traits](#P1)
-   * [2. UAV Traits](#P2)
-   * [3. Area Under the Curve (AUC)](#P3)
-   * [4. Principal component analysis (PCA)](#P4)
-   * [5. Correlation (r)](#P5)
-   * [6. Heading Day](#P6)
-   * [7. Maturity](#P7)
-   * [8. Lodging](#P8)
-   * [9. Statistical Applications](#P9)
-   * [Contact](#PC)
+   * [Introduction](#intro)
+   * [Image analysis in R](#r1)
+   * [1. Agronomic Traits](#p1)
+   * [2. UAV Traits](#p2)
+   * [3. Area Under the Curve (AUC)](#p3)
+   * [4. Principal component analysis (PCA)](#p4)
+   * [5. Correlation (r)](#p5)
+   * [6. Heading Day](#p6)
+   * [7. Maturity](#p7)
+   * [8. Lodging](#p8)
+   * [9. Statistical Applications](#p9)
+   * [Contact](#pC)
 
 <br />
 
-<div id="Intro" />
+<div id="intro" />
 
 ## Introduction 
 
@@ -83,7 +83,7 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
   <img src="https://raw.githubusercontent.com/filipematias23/images/master/readme/ODM_FIELDimageR_New.jpg" width="70%" height="70%">
 </p>
 
-<div id="R1" />
+<div id="r1" />
 
 [Menu](#menu)
 
@@ -310,7 +310,7 @@ write.csv(DataTotal,"DataTotal.csv",row.names = F,col.names = T)
 
 [Menu](#menu)
 
-<div id="P1" />
+<div id="p1" />
 
 ## Agronomic Traits
 
@@ -387,7 +387,7 @@ ggplot(data = H2.AG,
 
 [Menu](#menu)
 
-<div id="P2" />
+<div id="p2" />
 
 ## UAV Traits
 
@@ -474,7 +474,7 @@ ggplot(data = H2.UAV,
 
 [Menu](#menu)
 
-<div id="P3" />
+<div id="p3" />
 
 ## Area Under the Curve (AUC)
 
@@ -655,7 +655,7 @@ ggplot(data = H2.AUC,
 
 [Menu](#menu)
 
-<div id="P4" />
+<div id="p4" />
 
 ## Principal component analysis (PCA)
 
@@ -714,7 +714,7 @@ fviz_pca_biplot(Pheno.PCA.2,
 
 [Menu](#menu)
 
-<div id="P5" />
+<div id="p5" />
 
 ## Correlation Analysis (r)
 
@@ -800,7 +800,7 @@ corrplot(r$correlation,
 
 [Menu](#menu)
 
-<div id="P6" />
+<div id="p6" />
 
 ## Heading Day
 
@@ -870,7 +870,7 @@ labs(y="Days to Heading (day of the year)",
 
 [Menu](#menu)
 
-<div id="P7" />
+<div id="p7" />
 
 ## Maturity 
 
@@ -940,7 +940,7 @@ ggplot(data = Data.2,
 
 [Menu](#menu)
 
-<div id="P8" />
+<div id="p8" />
 
 ## Lodging
 
@@ -1097,7 +1097,7 @@ par(mfrow=c(1,1))
 
 [Menu](#menu)
 
-<div id="P9" />
+<div id="p9" />
 
 ## UAV Data on statistic applications for YIELD selection
 
@@ -1353,7 +1353,7 @@ ggplot(data = Data.SC,
 
 [Menu](#menu)
 
-<div id="PC" />
+<div id="pC" />
 
 ### Forum for questions 
 
