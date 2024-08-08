@@ -254,11 +254,7 @@ for(i in 2:length(Field)){
                      index = c("NGRDI","BGI","GLI","NDVI","NDRE","CIG","CIRE"),plot = F)
   EX.I<- fieldInfo_extra(mosaic = EX.I,
                    fieldShape = Shapefile)
-  # Canopy Cover
-  EX.AI<-fieldArea(mosaic = EX.1$newMosaic, 
-                  fieldShape = EX.I)
-  EX.I<-merge.data.frame(EX.I,EX.AI[,1:3],by="PlotID")
-  
+
   # EPH
   DSM0 <- rast(paste("./DSM/",Field_DSM[1],sep = ""))
   DSM1 <- rast(paste("./DSM/",Field_DSM[i],sep = ""))
@@ -276,6 +272,12 @@ for(i in 2:length(Field)){
                                            quantiles=c(0,0.1,0.25,0.5,0.75,0.9,1))
   
   EX.I <- cbind(EX.I, EPH)
+
+  # Canopy Cover
+  EX.AI<-fieldArea(mosaic = EX.1$newMosaic, 
+                  fieldShape = EX.I)
+  EX.I<-merge.data.frame(EX.I,EX.AI[,1:3],by="PlotID")
+
   DataTotal1<-data.frame(Date=Field[i],EX.I)
   DataTotal1<- DataTotal1[,!colnames(DataTotal1)%in%c("geometry.y","geometry.x","geometry")]
   
