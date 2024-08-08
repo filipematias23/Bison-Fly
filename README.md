@@ -132,17 +132,20 @@ The **Bison-Fly** tutorial is the *NDSU Spring Wheat UAV Pipeline* developed in 
 ##########################################
 
 ### Install Packages ###
-requiredPackages = c("devtools","raster","rgdal","ggplot2","DescTools","lme4","emmeans","reshape2","car","plyr","factoextra","ggrepel","agricolae","corrplot","RStoolbox","gridExtra")
+requiredPackages = c("devtools","terra","sf","ggplot2","DescTools","lme4","emmeans","reshape2","car","plyr","factoextra","ggrepel","agricolae","corrplot","RStoolbox","gridExtra",'mapview','stars','caret','mapedit',"dplyr","fields","leafem","leafsync","lwgeom","BiocManager","git2r","exactextractr")
 for(p in requiredPackages){
   if(!require(p,character.only = TRUE)) install.packages(p)
   library(p,character.only = TRUE)
 }
-devtools::install_github("filipematias23/FIELDimageR")
+
+devtools::install_github("OpenDroneMap/FIELDimageR")
+devtools::install_github("filipematias23/FIELDimageR.Extra")
 
 ### Necessary packages ###
 library(FIELDimageR)
-library(raster)
-library(rgdal)
+library(FIELDimageR.Extra)
+library(terra)
+library(sf)
 library(ggplot2)
 library(DescTools)
 library(lme4)
@@ -171,8 +174,8 @@ Field_DSM <- list.files("./DSM/") # 15 DSM orthomosaics
 ######################################################
 
 ### Suggested strategy of using lids to highlight where to click ###
-Test <- stack(paste("./5band/",Field[4],sep = ""))
-plotRGB(FIELDimageR:::RGB.rescale(Test,3))
+Test <- rast(paste("./5band/",Field[4],sep = ""))
+fieldView(Test)
 
 ```
 
@@ -185,24 +188,24 @@ plotRGB(FIELDimageR:::RGB.rescale(Test,3))
 
 Data <- read.csv("EX_DATA.csv",header = T,fileEncoding="UTF-8-BOM")
 Map <- read.csv("EX_MAP.csv",header = F,fileEncoding="UTF-8-BOM")
-Shapefile <- fieldShape(mosaic = Test,
+Shapefile <- fieldShape_render(mosaic = Test,
                         ncols = 11,
                         nrows = 20,
                         fieldData = Data,
-                        ID = "PLOT",
+                        PlotID = "PLOT",
                         fieldMap = Map)
-Shapefile<-Shapefile$fieldShape
-plotRGB(FIELDimageR:::RGB.rescale(Test,3))
-plot(Shapefile, border="green",add=T)
+fieldView(mosaic = Test,
+          fieldShape = Shapefile,
+          type = 2,
+          alpha = 0.2)
 
 ### Saving Shapefile ###
-library(rgdal)
-writeOGR(Shapefile, ".", "Shapefile", driver="ESRI Shapefile")
-# Shapefile <- readOGR("Shapefile.shp") # Reading the saved shapefile option 02.
+# write_sf(Shapefile, "Shapefile.shp")
+# Shapefile <- read_sf("Shapefile.shp") # Reading the saved shapefile option 02.
 
 ### If you downloaded the example in the descriptions above use this code to read the shapefile:
 # unzip("Shapefile.zip")
-# Shapefile <- readOGR("./Shapefile/Shapefile.shp") # Reading the saved shapefile.
+# Shapefile <- read_sf("./Shapefile/Shapefile.shp") # Reading the saved shapefile.
 # plot(Shapefile, border="red")
 
 ```
@@ -224,6 +227,7 @@ Mask <- fieldMask(Test,
                   index = "NDVI",
                   cropValue = 0.7,
                   cropAbove = FALSE)
+
 ```
 
 <p align="center">
@@ -244,62 +248,68 @@ Mask <- fieldMask(Test,
 DataTotal<-NULL
 for(i in 2:length(Field)){
   print(paste("===",Field[i],"==="))
-  EX <- stack(paste("./5band/",Field[i],sep = ""))
+  EX <- rast(paste("./5band/",Field[i],sep = ""))
   EX.1 <- fieldMask(EX,plot = F)
   EX.I <- fieldIndex(mosaic = EX,Red = 3,Green = 2,Blue = 1,RedEdge = 4,NIR = 5,
                      index = c("NGRDI","BGI","GLI","NDVI","NDRE","CIG","CIRE"),plot = F)
-  crs(Shapefile)<-crs(EX.I)
-  EX.I<- fieldInfo(mosaic = EX.I,
-                   fieldShape = Shapefile,
-                   buffer = -0.05,
-                   n.core = 3)
+  EX.I<- fieldInfo_extra(mosaic = EX.I,
+                   fieldShape = Shapefile)
   # Canopy Cover
-  EX.I<-fieldArea(mosaic = EX.1$mask, 
-                  fieldShape = EX.I$fieldShape,plot = F)
+  EX.AI<-fieldArea(mosaic = EX.1$newMosaic, 
+                  fieldShape = EX.I)
+  EX.I<-merge.data.frame(EX.I,EX.AI[,1:3],by="PlotID")
+  
   # EPH
-  DSM0 <- stack(paste("./DSM/",Field_DSM[1],sep = ""))
-  DSM1 <- stack(paste("./DSM/",Field_DSM[i],sep = ""))
+  DSM0 <- rast(paste("./DSM/",Field_DSM[1],sep = ""))
+  DSM1 <- rast(paste("./DSM/",Field_DSM[i],sep = ""))
   
   # Canopy Height Model (CHM):
-  DSM0 <- resample(DSM0, DSM1)
-  CHM <- DSM1-DSM0
-  CHM <- fieldMask(CHM, mask = Mask$mask, plot=F)
+  # DSM0 <- resample(DSM0, DSM1)
+  CHM <- fieldHeight(dsm_before = DSM0, dsm_after = DSM1)
+  CHM <- fieldMask(CHM$height, mask = Mask$mask, plot=F)
   CHM <- CHM$newMosaic
   
   # Extracting the estimate plant height average (EPH):
-  EPH <- fieldInfo(CHM, fieldShape = EX.I$fieldShape, fun = "quantile",n.core = 3,plot = F)
-  DataTotal1<-data.frame(Date=Field[i],EPH$fieldShape@data)
-  EPH.1090.A<-extract(x = CHM, y = EPH$fieldShape)
-  EPH.1090<-do.call(rbind,lapply(EPH.1090.A, quantile, probs = c(0.1,0.9), na.rm=TRUE))
-  DataTotal1$'Height_10'<-EPH.1090[,1]
-  DataTotal1$'Height_90'<-EPH.1090[,2]
+  EPH <- exactextractr::exact_extract(x = CHM,
+                                           y = st_as_sf(EX.I),
+                                           fun = "quantile",
+                                           quantiles=c(0,0.1,0.25,0.5,0.75,0.9,1))
+  
+  EX.I <- cbind(EX.I, EPH)
+  DataTotal1<-data.frame(Date=Field[i],EX.I)
+  DataTotal1<- DataTotal1[,!colnames(DataTotal1)%in%c("geometry.y","geometry.x","geometry")]
   
   # Data Table:
   DataTotal<-rbind(DataTotal,DataTotal1)
   
   # Making plots:
-  fieldPlot(EX.I$fieldShape,
-            mosaic = EX,
-            color = c("red","green"),
-            #min.lim = 0.45,max.lim = 0.75,
-            fieldAttribute = "NDVI")
+  fieldView(mosaic = EX,
+            fieldShape = st_as_sf(EX.I),
+            plotCol = "NDVI_mean",
+            col_grid = c("blue", "grey", "red"),
+            type = 2,
+            alpha_grid = 0.6)
+  
 }
 
 ### Correcting Names ###
-Data.names<-gsub("layer",'Height_0',colnames(DataTotal))
-Data.names<-gsub("NA..1",'Height_50',Data.names)
-Data.names<-gsub("NA..2",'Height_75',Data.names)
-Data.names<-gsub("NA..3",'Height_100',Data.names)
-Data.names[Data.names=="NA."]<-'Height_25'
-Data.names<-gsub("objArea",'Canopy',Data.names)
+Data.names<-gsub("q00",'Height_0',colnames(DataTotal))
+Data.names<-gsub("q10",'Height_10',Data.names)
+Data.names<-gsub("q25",'Height_25',Data.names)
+Data.names<-gsub("q50",'Height_50',Data.names)
+Data.names<-gsub("q75",'Height_75',Data.names)
+Data.names<-gsub("q90",'Height_90',Data.names)
+Data.names<-gsub("q100",'Height_100',Data.names)
+Data.names<-gsub("AreaPercentage",'Canopy',Data.names)
+Data.names<-gsub("_mean",'',Data.names)
 colnames(DataTotal)<-Data.names
-DataTotal<-DataTotal[,!colnames(DataTotal)=="ID.1"]
 DataTotal$DAP<-as.numeric(do.call(rbind,strsplit(DataTotal$Date,split = "_"))[,4])
 head(DataTotal)
 
 ### Saving extracted data in a .CSV ###
-write.csv(DataTotal,"DataTotal.csv",row.names = F,col.names = T)
+# write.csv(DataTotal,"DataTotal.csv",row.names = F,col.names = T)
 # DataTotal<-read.csv("DataTotal.csv",header = T)
+
 ```
 
 <p align="center">
