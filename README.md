@@ -186,8 +186,17 @@ fieldView(Test)
 ### Plot Polygons Grid ###
 ##########################
 
+### Field data ###
 Data <- read.csv("EX_DATA.csv",header = T,fileEncoding="UTF-8-BOM")
+
+### MAP ###
 Map <- read.csv("EX_MAP.csv",header = F,fileEncoding="UTF-8-BOM")
+Map
+rotate <- function(x) t(apply(x, 2, rev))
+Map<-rotate(rotate(Map))
+Map
+
+### Grid ###
 Shapefile <- fieldShape_render(mosaic = Test,
                         ncols = 11,
                         nrows = 20,
@@ -206,6 +215,7 @@ fieldView(mosaic = Test,
 ### If you downloaded the example in the descriptions above use this code to read the shapefile:
 # unzip("Shapefile.zip")
 # Shapefile <- read_sf("./Shapefile/Shapefile.shp") # Reading the saved shapefile.
+# Shapefile$PlotID<-Shapefile$PlotName
 # plot(Shapefile, border="red")
 
 ```
